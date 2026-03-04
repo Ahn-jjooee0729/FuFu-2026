@@ -1,13 +1,25 @@
-body {
+/*전체 리셋+레이아웃 안정화*/
+* {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+html, body{
+  height: 100%;
+}
+
+/*기본 폰트/가독성+바깐배경(모바일 프레임 밖)*/
+body{
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, 
+  Ubuntu, Cantarell, "Fira Sans","Droid Sans", 'Helvetica Neue', Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  background: #f3f4f6;
+}
+
+/*CRA 기본값 유지(필요시)*/
+code{
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
 }
