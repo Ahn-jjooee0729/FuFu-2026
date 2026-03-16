@@ -4,6 +4,7 @@ import Signup from "./pages/Signup";
 import Home from "./pages/Home";
 import MyPageScreen from "./pages/MyPageScreen.js";
 import FollowingPageScreen from "./pages/FollowingPageScreen.js";
+import Upload from "./pages/Upload.js";
 
 
 import {AuthProvider} from "./AuthContext";
@@ -30,7 +31,9 @@ function App(){
               <Route path="/home" element={<Home />} />
               <Route path="/followers" element={<FollowingPageScreen />} />
               <Route path="/mypage" element={<MyPageScreen />} />
+              <Route path="/upload" element={<Upload />} />
           </Route>
+          
           <Route path="*" element={<Navigate to="/home" replace />} />
         </Routes>
       </AuthProvider>

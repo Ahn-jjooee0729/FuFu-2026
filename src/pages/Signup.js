@@ -3,6 +3,7 @@ import { auth, db } from "../firebase";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { doc, setDoc } from "firebase/firestore";
 import {useNavigate, Link} from "react-router-dom";
+import Container from "../components/Container";
 
 function Signup(){
     const [email, setEmail] = useState("");
@@ -36,7 +37,8 @@ function Signup(){
     };
 
     return(
-        <div>
+        <Container>
+          <div>
             <h2>Registration</h2>
             <input
                 type="email"
@@ -58,7 +60,9 @@ function Signup(){
             
             Already have an account?<Link>Login</Link>
 
-        </div>
+        </div>  
+        </Container>
+        
     );
 }
 

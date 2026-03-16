@@ -5,9 +5,9 @@ import Container from "../components/Container";
 export default function AppLayout(){
     return(
         <Container>
-            <div style={{minHeight:"100vh", paddingBottom: "64px"}}>
+            <BottomTabBar />
+            <div style={{minHeight:"100vh", paddingTop: "64px"}}> 
                 <Outlet />
-                <BottomTabBar />
             </div>
         </Container>
     );

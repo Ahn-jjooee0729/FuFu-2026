@@ -1,3 +1,5 @@
+import KaKaoMap from "../components/KaKaoMap";
+
 export default function FollowingPageScreen(){
     return (
         <div style={{padding: 16}}>
@@ -16,7 +18,7 @@ export default function FollowingPageScreen(){
                     color: "#6b7280",
                 }}
                 >
-                Follower Map Placeholder
+                <KaKaoMap />
                 </div>
         </div>
     );

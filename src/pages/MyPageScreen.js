@@ -1,4 +1,5 @@
 import {useAuth} from "../AuthContext";
+
 //console.log("✅ MyPageScreen.js LOADED");
 
 export default function MyPageScreen(){
@@ -10,7 +11,7 @@ export default function MyPageScreen(){
             <p>My Map</p>
             <p>Logged in as: {user?.email}</p>
             
-            <div
+            {/*{<div
             style={{
                 marginTop: 12,
                 height: "70vh",
@@ -22,8 +23,8 @@ export default function MyPageScreen(){
                 color:"#6b7280",
             }}
             >
-                My Map Placeholder
-            </div>
+            </div>*/}
+            
         </div>
     );
 }

@@ -3,6 +3,7 @@ import {auth} from "../firebase";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { useNavigate, Link } from "react-router-dom";
 import {useAuth} from "../AuthContext";
+import Container from "../components/Container";
 
 function Login(){
     const [email, setEmail] = useState("");
@@ -58,7 +59,8 @@ const getLoginErrorMessage = (error) =>{
     };
 
     return (
-        <div>
+        <Container>
+           <div>
             <h2>Login</h2>
 
             <input
@@ -82,7 +84,9 @@ const getLoginErrorMessage = (error) =>{
             <p>
                 Don't you have an account yet? <Link to="/signup">Registration</Link>
             </p>
-        </div>
+        </div> 
+        </Container>
+        
     );
 }
 
