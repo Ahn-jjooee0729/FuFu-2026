@@ -2,14 +2,14 @@ import {NavLink} from "react-router-dom";
 
 const baseStyle = {
     position: "fixed",
-    top: 0,
+    bottom: 0,
     width: "100%",
     maxWidth: 430,
     height: 64,
     display: "flex",
     justifyContent: "space-around",
     alignItems: "center",
-    borderBottom: "1px solid #e5e7eb",
+    borderTop: "1px solid #e5e7eb",
     background: "white",
     zIndex: 1000,
 };

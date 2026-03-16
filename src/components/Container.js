@@ -12,9 +12,10 @@ export default function Container({children}){
                     style={{
                         width: "100%",
                         maxWidth: "430px",
-                        minHeight: "100vh",
+                        height: "100vh",
                         background: "white",
                         position: "relative",
+                        overflow: "hidden",
                     }}
                     >
                         {children}

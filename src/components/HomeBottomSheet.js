@@ -1,4 +1,8 @@
-export default function HomeBottomSheet(){
+export default function HomeBottomSheet({
+    categories,
+    selectedCategory,
+    onSelectCategory,
+}){
     return(
         <div
             style ={{
@@ -13,6 +17,7 @@ export default function HomeBottomSheet(){
                 padding: 16,
                 zIndex: 20,
                 minHeight: 220,
+                boxSizing: "border-box",
             }}
         >
             <div
@@ -48,22 +53,33 @@ export default function HomeBottomSheet(){
                     paddingBottom: 8,
                 }}
             >
-                {["자연", "맛집", "숙박", "카페", "산책"].map((category) => (
-                    <button
-                        key={category}
-                        style={{
+                {categories.map((category) => {
+                    const isActive = selectedCategory === category;
+
+                    return (
+                        <button
+                            key={category}
+                            type="button"
+                            onClick={() => {
+                                console.log("clicked:", category);
+                                onSelectCategory(category);
+                            }}
+                            style={{
                             flex: "0 0 auto",
                             padding: "10px 14px",
                             borderRadius: 999,
-                            border: "1px solid #d1d5db",
-                            background: "white",
+                            border: isActive
+                                ? "1px solid black"
+                                : "1px solid #d1d5db",
+                            background: isActive ? "black" : "white",
                             cursor: "pointer",
                             whiteSpace: "nowrap",
-                        }}
-                    >
-                        {category}
-                    </button>
-                ))}
+                            }}
+                        >
+                            {category}
+                        </button>
+                    );
+                })}
             </div>
         </div>
     );
