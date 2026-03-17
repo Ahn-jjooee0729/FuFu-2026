@@ -35,6 +35,8 @@ export default function Home(){
             (item) => item.category === selectedCategory
         ); 
 
+    //console.log("Home filteredFootprints:", filteredFootprints);
+    
     return(
         <div 
             style={{ 
@@ -51,7 +53,7 @@ export default function Home(){
                     zIndex: 1,
                 }}
             >
-                <KaKaoMap />
+                <KaKaoMap footprints={filteredFootprints} />
             </div>
 
             <div
