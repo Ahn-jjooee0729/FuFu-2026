@@ -35,7 +35,7 @@ export default function LocationPickerMap({keyword, onSelectLocation}){
 
     const handleMapClick = (_t, mouseEvent) => {
         const lat = mouseEvent.latLng.getLat();
-        const lng = mouseEvent.latLng.gestLng();
+        const lng = mouseEvent.latLng.getLng();
 
         const newPosition = { lat, lng };
         setMarkerPosition(newPosition);
