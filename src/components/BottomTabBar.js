@@ -1,10 +1,10 @@
 import {NavLink} from "react-router-dom";
 
 const baseStyle = {
-    position: "fixed",
+    position: "absolute",
+    left: 0,
+    right: 0,
     bottom: 0,
-    width: "100%",
-    maxWidth: 430,
     height: 64,
     display: "flex",
     justifyContent: "space-around",
@@ -21,7 +21,7 @@ const item = (isActive) => ({
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
-    gap:4,
+    gap: 4,
     fontSize: 12,
 });
 

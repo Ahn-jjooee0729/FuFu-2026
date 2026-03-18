@@ -15,8 +15,11 @@ export default function Home(){
     const {user}=useAuth();
 
     const [selectedCategory, setSelectedCategory ] = useState("전체");
-    console.log("mockFootprints:", mockFootprints);
-    
+    //console.log("mockFootprints:", mockFootprints);
+    const [inputValue, setInputValue] = useState("");
+    const [searchKeyword, setSearchKeyword] = useState("");
+
+
     const handleLogout = async ()=>{
         try{
             await signOut(auth);
@@ -28,13 +31,49 @@ export default function Home(){
         }
     };
 
-    const filteredFootprints = 
-        selectedCategory === "전체"
-        ? mockFootprints
-        : mockFootprints.filter(
-            (item) => item.category === selectedCategory
-        ); 
+    
 
+   
+
+    
+    const normalizedKeyword = searchKeyword.trim().toLowerCase();
+
+    const filteredFootprints = mockFootprints.filter((item)=>{
+        const matchCategory =
+            selectedCategory === "전체" || item.category === selectedCategory;
+
+        const matchRegion = 
+            normalizedKeyword === "" ||
+            item.region.toLowerCase().includes(normalizedKeyword);
+
+        return matchCategory && matchRegion;
+    });
+
+    const mapCenter = 
+        filteredFootprints.length > 0
+        ? {
+            lat: filteredFootprints[0].lat,
+            lng: filteredFootprints[0].lng,
+        }
+        : {lat: 37.5665, lng: 126.9780 };
+
+    const handleSearch = () => {
+        setSearchKeyword(inputValue);
+    };
+
+    const handleSearchKeyDown = (e) => {
+        if(e.key === "Enter"){
+            setSearchKeyword(inputValue);
+        }
+    };
+    
+    const handleReset = () => {
+        setInputValue("");
+        setSearchKeyword("");
+    };
+
+    console.log("searchKeyword:", searchKeyword);
+    console.log("filteredFootprints:", filteredFootprints);
     //console.log("Home filteredFootprints:", filteredFootprints);
     
     return(
@@ -53,7 +92,10 @@ export default function Home(){
                     zIndex: 1,
                 }}
             >
-                <KaKaoMap footprints={filteredFootprints} />
+                <KaKaoMap 
+                    footprints={filteredFootprints} 
+                    center={mapCenter}
+                />
             </div>
 
             <div
@@ -124,15 +166,22 @@ export default function Home(){
                     fontSize: 13,
                 }}
             >
-                선택된 카테고리: {selectedCategory}
-                <br />
-                표시할 발자국 수: {filteredFootprints?.length || 0}
+                <div>선택된 카테고리: {selectedCategory}</div>
+                <div>입력 중: {inputValue || "(없음)"}</div>
+                <div>적용된 검색어: {searchKeyword || "(없음)"}</div>
+                <div>표시할 발자국 수: {filteredFootprints?.length || 0}</div>
+                
             </div>
             
             <HomeBottomSheet 
                 categories={categories}
                 selectedCategory={selectedCategory}
                 onSelectCategory={setSelectedCategory}
+                inputValue={inputValue}
+                onChangeInputValue={setInputValue}
+                onSearch={handleSearch}
+                onSearchKeyDown={handleSearchKeyDown}
+                onReset={handleReset}
             />
         </div>
     );

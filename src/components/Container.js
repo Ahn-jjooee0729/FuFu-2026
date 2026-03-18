@@ -3,7 +3,7 @@ export default function Container({children}){
         <div
             style={{
                 background: "#f3f4f6",
-                minHeight: "100vh",
+                height: "100vh",
                 display: "flex",
                 justifyContent: "center",
             }}
