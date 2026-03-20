@@ -2,7 +2,7 @@ export const mockFootprints = [
     {
         id: 1,
         title: "행궁동 감성 카페",
-        category: "카페",
+        category: "Cafe",
         lat: 37.2828,
         lng: 127.0150,
         region: "수원",
@@ -10,7 +10,7 @@ export const mockFootprints = [
     {
         id: 2,
         title: "서울 시청 근처 맛집",
-        category: "맛집",
+        category: "Restaurant",
         lat: 37.5665,
         lng: 126.9780,
         region: "서울",
@@ -18,7 +18,7 @@ export const mockFootprints = [
     {
         id: 3,
         title: "광교 산책로",
-        category: "산책",
+        category: "Walking",
         lat: 37.2910,
         lng: 127.0460,
         region: "수원",
@@ -26,7 +26,7 @@ export const mockFootprints = [
     {
         id: 4,
         title: "북촌 한옥마을",
-        category: "자연",
+        category: "Nature",
         lat: 37.5826,
         lng: 126.9830,
         region: "서울",
@@ -34,7 +34,7 @@ export const mockFootprints = [
     {
         id: 5,
         title: "수원 조용한 숙소",
-        category: "숙박",
+        category: "Accomodation",
         lat: 37.2636,
         lng: 127.0286,
         region: "수원",
@@ -42,7 +42,7 @@ export const mockFootprints = [
     {
         id: 6,
         title: "성수 카페거리",
-        category: "카페",
+        category: "Cafe",
         lat: 37.5447,
         lng: 127.0557,
         region: "서울",
