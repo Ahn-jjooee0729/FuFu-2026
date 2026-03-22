@@ -14,9 +14,10 @@ export default function Home(){
     const navigate = useNavigate();
     const {user}=useAuth();
 
-    const [selectedCategory, setSelectedCategory ] = useState("전체");
+    const [selectedCategory, setSelectedCategory ] = useState("All");
     const [inputValue, setInputValue] = useState("");
     const [searchKeyword, setSearchKeyword] = useState("");
+    const [isSheetExpanded, setIsSheetExpanded] = useState(false);
 
     const handleLogout = async ()=>{
         try{
@@ -43,7 +44,7 @@ export default function Home(){
 
     const filteredFootprints = mockFootprints.filter((item)=>{
         const matchCategory =
-            selectedCategory === "전체" || item.category === selectedCategory;
+            selectedCategory === "All" || item.category === selectedCategory;
 
         const matchRegion = 
             normalizedKeyword === "" ||
@@ -214,6 +215,8 @@ export default function Home(){
             categories={categories}
             selectedCategory={selectedCategory}
             onSelectCategory={setSelectedCategory}
+            isExpanded={isSheetExpanded}
+            onToggleExpanded={()=> setIsSheetExpanded((prev)=>!prev)}
         />
         </div>
     );

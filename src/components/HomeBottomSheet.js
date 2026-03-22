@@ -2,6 +2,8 @@ export default function HomeBottomSheet({
     categories,
     selectedCategory,
     onSelectCategory,
+    isExpanded,
+    onToggleExpanded,
 }) {
     return(
         <div
@@ -16,11 +18,27 @@ export default function HomeBottomSheet({
                 boxShadow: "0 -6px 20px rgba(0,0,0,0.12)",
                 padding: "16px 16px 20px",
                 zIndex: 20,
-                minHeight: 260,
+                height: isExpanded ? 320 : 88,
                 boxSizing: "border-box",
+                transition: "height 0.25s ease",
+                overflow: "hidden",
             }}
         >
-            <div
+            {/*손잡이+ 카테고리라는 제목 영역*/}
+            <button 
+                type="button"
+                onClick={onToggleExpanded}
+                style={{
+                    width: "100%",
+                    background: "transparent",
+                    border: "none",
+                    padding: 0,
+                    margin: 0,
+                    cursor: "pointer",
+                    textAlign: "left",
+                }}
+            >
+                <div
                 style={{
                     width: 48,
                     height: 5,
@@ -30,41 +48,63 @@ export default function HomeBottomSheet({
                 }}
             />
 
-            <h2 
+            <div
+                style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                    marginBottom: isExpanded ? 16 : 0,
+                }}
+            >
+               <h2 
                 style={{ 
-                    margin: "0 0 16px 0",
+                    margin: 0,
                     fontSize: 20,
                     fontWeight: 700,
                     }}
             >
                 Categories
-            </h2>
-
+            </h2> 
+            
+            <span
+                style={{
+                    fontSize: 20,
+                    color: "#6b7280",
+                    transform: isExpanded ? "rotate(180deg)" : "rotate(0deg)",
+                    transition: "transform 0.2s ease",
+                    display: "inline-block",
+                }}
+            >
+                ^
+            </span>
+            </div>
+        </button>
+            
+        {/*펼쳤을 때만 카테고리 보이게 */}
+        {isExpanded && (
             <div
                 style={{
                     display: "flex",
                     gap: 14,
                     overflowX: "auto",
                     paddingBottom: 8,
-                    scrollingBottom: 8,
                     scrollbarWidth: "none",
                     msOverflowStyle: "none",
                 }}
             >
-                {/*전체카드*/}
                 <button
                     type="button"
-                    onClick={() => onSelectCategory("All")}
+                    onClick={()=> onSelectCategory("All")}
                     style={{
-                        minWidth: 140,
-                        height: 170,
+                        minWidth: 150,
+                        height: 180,
                         borderRadius: 24,
                         border:
                             selectedCategory === "All"
                             ? "2px solid black"
                             : "1px solid #e5e7eb",
                         background:
-                            selectedCategory === "All" ? "#f9fafb" : "white",
+                            selectedCategory ==="All" ? "#f9fafb" : "white",
                         flex: "0 0 auto",
                         cursor: "pointer",
                         display: "flex",
@@ -75,19 +115,19 @@ export default function HomeBottomSheet({
                         padding: 16,
                     }}
                 >
-                    <div style={{ fontSize: 42}}>👣</div>
+                    <div style={{ fontSize: 42 }}>👣</div>
                     <div
                         style={{
                             fontSize: 16,
                             fontWeight: 600,
                         }}
                     >
-                        All
+                        ALL
                     </div>
+                    
                 </button>
 
                 {categories.map((categories) => {
-                    
                     const isActive = selectedCategory === categories.name;
 
                     return(
@@ -100,7 +140,7 @@ export default function HomeBottomSheet({
                                 height: 170,
                                 borderRadius: 24,
                                 border: isActive
-                                    ? "2px solid balck"
+                                    ? "2px solid black"
                                     : "1px solid #e5e7eb",
                                 background: isActive ? "#f9fafb" : "white",
                                 flex: "0 0 auto",
@@ -126,6 +166,7 @@ export default function HomeBottomSheet({
                     );
                 })}
             </div>
+        )}      
         </div>
     );
 }
