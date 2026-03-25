@@ -1,6 +1,6 @@
 export default function HomeBottomSheet({
     categories,
-    selectedCategory,
+    //selectedCategory,
     onSelectCategory,
     isExpanded,
     onToggleExpanded,
@@ -25,19 +25,13 @@ export default function HomeBottomSheet({
             }}
         >
             {/*손잡이+ 카테고리라는 제목 영역*/}
-            <button 
-                type="button"
+            <div
                 onClick={onToggleExpanded}
                 style={{
-                    width: "100%",
-                    background: "transparent",
-                    border: "none",
-                    padding: 0,
-                    margin: 0,
                     cursor: "pointer",
-                    textAlign: "left",
                 }}
             >
+
                 <div
                 style={{
                     width: 48,
@@ -62,9 +56,9 @@ export default function HomeBottomSheet({
                     fontSize: 20,
                     fontWeight: 700,
                     }}
-            >
-                Categories
-            </h2> 
+                >
+                    Categories
+                </h2> 
             
             <span
                 style={{
@@ -77,8 +71,8 @@ export default function HomeBottomSheet({
             >
                 ^
             </span>
-            </div>
-        </button>
+        </div>
+        </div>
             
         {/*펼쳤을 때만 카테고리 보이게 */}
         {isExpanded && (
@@ -92,9 +86,12 @@ export default function HomeBottomSheet({
                     msOverflowStyle: "none",
                 }}
             >
-                <button
+                {/* <button
                     type="button"
-                    onClick={()=> onSelectCategory("All")}
+                    onClick={(e)=> {
+                        e.stopPropagation();
+                        onSelectCategory("All");
+                    }}
                     style={{
                         minWidth: 150,
                         height: 180,
@@ -125,46 +122,48 @@ export default function HomeBottomSheet({
                         ALL
                     </div>
                     
-                </button>
+                </button> */}
 
-                {categories.map((categories) => {
-                    const isActive = selectedCategory === categories.name;
+                {categories.map((category) => (
+                    //const isActive = selectedCategory === category.name;
 
-                    return(
+                    //return(
                         <button
-                            key={categories.id}
+                            key={category.id}
                             type="button"
-                            onClick={()=> onSelectCategory(categories.name)}
+                            onClick={(e)=> {
+                                e.stopPropagation();
+                                //console.log("clicked category:", category.name);
+                                onSelectCategory(category.name);
+                            }}
                             style={{
-                                minWidth: 140,
-                                height: 170,
+                                minWidth: 150,
+                                height: 180,
                                 borderRadius: 24,
-                                border: isActive
-                                    ? "2px solid black"
-                                    : "1px solid #e5e7eb",
-                                background: isActive ? "#f9fafb" : "white",
+                                border: "1px solid #e5e7eb",
+                                background: "white",
                                 flex: "0 0 auto",
                                 cursor: "pointer",
                                 display: "flex",
                                 flexDirection: "column",
                                 alignItems: "center",
                                 justifyContent: "center",
-                                gap: 12,
+                                gap: 14,
                                 padding: 16,
                             }}
                         >
-                            <div style={{ fontSize: 43}}>{categories.emoji}</div>
+                            <div style={{ fontSize: 42 }}>{category.emoji}</div>
                             <div
                                 style={{
                                     fontSize: 16,
                                     fontWeight: 600,
                                 }}
                             >
-                                {categories.name}
+                                {category.name}
                             </div>
                         </button>
-                    );
-                })}
+                    //);
+                ))}
             </div>
         )}      
         </div>

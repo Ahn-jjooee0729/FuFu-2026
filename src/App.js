@@ -5,14 +5,15 @@ import Home from "./pages/Home";
 import MyPageScreen from "./pages/MyPageScreen.js";
 import FollowingPageScreen from "./pages/FollowingPageScreen.js";
 import Upload from "./pages/Upload.js";
+import CategoryPage from "./pages/CategoryPage";
 
 
 import {AuthProvider} from "./AuthContext";
 import ProtectedRoute from "./ProtectedRoute";
 import AppLayout from "./pages/AppLayout";
 
-console.log("MyPageScreen typeof:", typeof MyPageScreen, MyPageScreen);
-console.log("FollowingPageScreen typeof:", typeof FollowingPageScreen, FollowingPageScreen);
+// console.log("MyPageScreen typeof:", typeof MyPageScreen, MyPageScreen);
+// console.log("FollowingPageScreen typeof:", typeof FollowingPageScreen, FollowingPageScreen);
 function App(){
   return (
     <BrowserRouter>
@@ -32,6 +33,7 @@ function App(){
               <Route path="/followers" element={<FollowingPageScreen />} />
               <Route path="/mypage" element={<MyPageScreen />} />
               <Route path="/upload" element={<Upload />} />
+              <Route path="/category/:categoryName" element={<CategoryPage />} />
           </Route>
           
           <Route path="*" element={<Navigate to="/home" replace />} />

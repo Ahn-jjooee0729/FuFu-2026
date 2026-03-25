@@ -14,7 +14,7 @@ export default function Home(){
     const navigate = useNavigate();
     const {user}=useAuth();
 
-    const [selectedCategory, setSelectedCategory ] = useState("All");
+    //const [selectedCategory, setSelectedCategory ] = useState(null);
     const [inputValue, setInputValue] = useState("");
     const [searchKeyword, setSearchKeyword] = useState("");
     const [isSheetExpanded, setIsSheetExpanded] = useState(false);
@@ -43,14 +43,15 @@ export default function Home(){
     const normalizedKeyword = searchKeyword.trim().toLowerCase();
 
     const filteredFootprints = mockFootprints.filter((item)=>{
-        const matchCategory =
-            selectedCategory === "All" || item.category === selectedCategory;
+        // const matchCategory =
+        //     !selectedCategory || item.category === selectedCategory;
 
         const matchRegion = 
             normalizedKeyword === "" ||
             item.region.toLowerCase().includes(normalizedKeyword);
 
-        return matchCategory && matchRegion;
+        //return matchCategory && matchRegion;
+        return matchRegion;
     });
 
     const mapCenter = 
@@ -58,7 +59,7 @@ export default function Home(){
         ? {
             lat: filteredFootprints[0].lat,
             lng: filteredFootprints[0].lng,
-        }
+            }
         : {lat: 37.5665, lng: 126.9780 };
 
 
@@ -71,7 +72,7 @@ export default function Home(){
             style={{
                 height: "100%",
                 position: "relative",
-                overlow: "hidden",
+                overflow: "hidden",
                 background: "#f3f4f6",
             }}
         >
@@ -111,7 +112,7 @@ export default function Home(){
                     display: "flex",
                     alignItems: "center",
                     padding: "0 14px",
-                    bosShadow: "0 2px 10px rgba(0,0,0,0.08)"
+                    boxShadow: "0 2px 10px rgba(0,0,0,0.08)"
                 }}
             >
                 <span
@@ -157,13 +158,13 @@ export default function Home(){
                 type="button"
                 onClick={() => navigate("/upload")}
                 style={{
-                    width: 44,
-                    height: 44,
+                    width: 46,
+                    height: 46,
                     borderRadius: "50%",
                     border: "none",
                     background: "white",
                     boxShadow: "0 2px 10px rgba(0,0,0,0.08)",
-                    fontSize: 20,
+                    fontSize: 22,
                     cursor: "pointer",
                 }}    
             >
@@ -186,7 +187,6 @@ export default function Home(){
             }}
         >
             <div>{user?.email}</div>
-            <div>카테고리: {selectedCategory}</div>
             <div>검색어: {searchKeyword || "(none)"}</div>
             <div>발자국 수: {filteredFootprints.length}</div>
         </div>
@@ -213,10 +213,19 @@ export default function Home(){
 
         <HomeBottomSheet
             categories={categories}
-            selectedCategory={selectedCategory}
-            onSelectCategory={setSelectedCategory}
+            //selectedCategory={selectedCategory}
+            onSelectCategory={(categoryName) => {
+                //console.log("about to navigate:", categoryName);
+
+                // if (categoryName === "All") {
+                //     setSelectedCategory("All");
+                //     return;
+                // }
+
+                navigate(`/category/${encodeURIComponent(categoryName)}`);
+            }}
             isExpanded={isSheetExpanded}
-            onToggleExpanded={()=> setIsSheetExpanded((prev)=>!prev)}
+            onToggleExpanded={() => setIsSheetExpanded((prev) => !prev)}
         />
         </div>
     );
