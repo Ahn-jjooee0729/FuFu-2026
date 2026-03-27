@@ -6,15 +6,15 @@ import MyPageScreen from "./pages/MyPageScreen.js";
 import FollowingPageScreen from "./pages/FollowingPageScreen.js";
 import Upload from "./pages/Upload.js";
 import CategoryPage from "./pages/CategoryPage";
+import MyCategoryPage from "./pages/MyCategoryPage.js";
 
 
 import {AuthProvider} from "./AuthContext";
 import ProtectedRoute from "./ProtectedRoute";
 import AppLayout from "./pages/AppLayout";
 
-// console.log("MyPageScreen typeof:", typeof MyPageScreen, MyPageScreen);
-// console.log("FollowingPageScreen typeof:", typeof FollowingPageScreen, FollowingPageScreen);
 function App(){
+  
   return (
     <BrowserRouter>
       <AuthProvider>
@@ -28,12 +28,13 @@ function App(){
                 <AppLayout />
               </ProtectedRoute>
             }
-            >
+          >
               <Route path="/home" element={<Home />} />
               <Route path="/followers" element={<FollowingPageScreen />} />
               <Route path="/mypage" element={<MyPageScreen />} />
               <Route path="/upload" element={<Upload />} />
               <Route path="/category/:categoryName" element={<CategoryPage />} />
+              <Route path="/mypage/category/:categoryName" element={<MyCategoryPage />}/>
           </Route>
           
           <Route path="*" element={<Navigate to="/home" replace />} />
