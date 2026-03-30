@@ -11,7 +11,7 @@ function Signup(){
 
     const navigate = useNavigate();
 
-    const handleSingup = async () => {
+    const handleSignup = async () => {
         try{
             const userCredential = await createUserWithEmailAndPassword(
                 auth,
@@ -55,7 +55,7 @@ function Signup(){
             />
             <br />
 
-            <button onClick={handleSingup}>Registration</button>
+            <button onClick={handleSignup}>Registration</button>
             <br />
             
             Already have an account?<Link>Login</Link>

@@ -1,6 +1,8 @@
 import {useAuth} from "../AuthContext";
+import { useMemo } from "react";
 import { categories } from "../mock/categories";
 import {useNavigate} from "react-router-dom";
+import { mockFootprints } from "../mock/footprints";
 
 export default function MyPageScreen(){
     const {user}=useAuth();
@@ -9,13 +11,14 @@ export default function MyPageScreen(){
     const nickname = user?.email ? user.email.split("@")[0] : "닉네임";
 
     //나중에  firebase 데이터 붙이면 여기만 실제 값으로 바꾸면 됨
-    const footprintCounts = {
-        Nature: 12,
-        Restaurant: 20,
-        Accomodation: 5,
-        Cafe: 9,
-        Walking: 14,
-    };
+    const footprintCounts = useMemo(() => {
+        return categories.reduce((acc, cat) => {
+            acc[cat.name] = mockFootprints.filter(
+                (fp) => fp.category === cat.name
+            ).length;
+            return acc;
+        }, {});
+    }, []);
 
     const handleCategoryClick = (categoryName) => {
         navigate(`/mypage/category/${categoryName}`);
@@ -104,7 +107,7 @@ export default function MyPageScreen(){
                             >
                                 Following
                             </div>
-                            <div style={{ fontSize: "18px", fontWight: "700", color: "#111" }}>14</div>
+                            <div style={{ fontSize: "18px", fontWeight: "700", color: "#111" }}>14</div>
                         </div>
                     </div>
                 </div>

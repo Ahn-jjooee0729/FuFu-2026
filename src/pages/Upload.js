@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import LocationPickerMap from "../components/LocationPickerMap";
+import { categories } from "../mock/categories";
 
 import { auth, db, storage } from "../firebase";
 import { addDoc, collection, serverTimestamp } from "firebase/firestore";
@@ -91,8 +92,11 @@ export default function Upload(){
                     style={{width:"100%", padding: 10, marginTop: 4}}
                 >
                     <option value="">Select category</option>
-                    <option value="restaurant">Restaurant</option>
-                    <option value="cafe">Cafe이렇게 카테고리 추가하고 수정하기</option>                
+                    {categories.map((cat) => (
+                        <option key={cat.id} value={cat.name}>
+                            {cat.emoji} {cat.name}
+                        </option>
+                    ))}                
                 </select>
             </div>
 
