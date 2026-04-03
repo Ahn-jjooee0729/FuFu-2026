@@ -1,4 +1,4 @@
-import KaKaoMap from "../components/KaKaoMap";
+import GoogleMapComponent from "../components/GoogleMap";
 
 export default function FollowingPageScreen(){
     return (
@@ -18,7 +18,7 @@ export default function FollowingPageScreen(){
                     color: "#6b7280",
                 }}
                 >
-                <KaKaoMap />
+                <GoogleMapComponent />
                 </div>
         </div>
     );

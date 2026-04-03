@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import KaKaoMap from "../components/KaKaoMap";
+import GoogleMapComponent from "../components/GoogleMap";
 import { mockFootprints } from "../mock/footprints";
 
 export default function CategoryPage(){
@@ -52,7 +52,7 @@ export default function CategoryPage(){
                     zIndex: 1,
                 }}
             >
-                <KaKaoMap
+                <GoogleMapComponent
                     footprints={filteredPosts}
                     center={mapCenter}
                 />

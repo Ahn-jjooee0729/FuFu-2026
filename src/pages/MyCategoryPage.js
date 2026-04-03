@@ -1,7 +1,7 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { useMemo,useState } from "react";
 import { mockFootprints } from "../mock/footprints";
-import KaKaoMap from "../components/KaKaoMap";
+import GoogleMapComponent from "../components/GoogleMap";
 
 
 export default function MyCategoryPage(){
@@ -71,7 +71,7 @@ export default function MyCategoryPage(){
                     zIndex: 1,
                 }}
             >
-                <KaKaoMap footprints={filteredFootprints} center={currentCenter} />
+                <GoogleMapComponent footprints={filteredFootprints} center={currentCenter} />
             </div>
 
             {/*뒤로가기*/}

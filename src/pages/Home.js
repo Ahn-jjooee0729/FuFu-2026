@@ -4,7 +4,7 @@ import {useNavigate} from "react-router-dom";
 import {useAuth} from "../AuthContext";
 import {useState} from "react";
 
-import KaKaoMap from "../components/KaKaoMap";
+import GoogleMapComponent from "../components/GoogleMap";
 import HomeBottomSheet from "../components/HomeBottomSheet";
 
 import { categories } from "../mock/categories";
@@ -83,7 +83,7 @@ export default function Home(){
                     zIndex: 1,
                 }}
             >
-                <KaKaoMap
+                <GoogleMapComponent
                     footprints={filteredFootprints}
                     center={mapCenter}
                 />
