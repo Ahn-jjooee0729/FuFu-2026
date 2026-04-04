@@ -1,6 +1,7 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { useMemo,useState } from "react";
-import { mockFootprints } from "../mock/footprints";
+import { useFootprints } from "../hooks/useFootprints";   
+import { useAuth } from "../AuthContext";
 import GoogleMapComponent from "../components/GoogleMap";
 
 
@@ -10,14 +11,6 @@ export default function MyCategoryPage(){
     const [isSheetOpen, setIsSheetOpen] = useState(false);
     const [selectedFootprint, setSelectedFootprint] = useState(null);
     const [mapCenter, setMapCenter] = useState(null);
-
-    const filteredFootprints = useMemo( () => {
-        if (!categoryName) return [];
-
-        return mockFootprints.filter(
-            (item) => item.category.toLowerCase() === categoryName.toLowerCase()
-        );
-    }, [categoryName]);
 
     const defaultCenter = useMemo(() => {
         if(filteredFootprints.length > 0){
@@ -49,7 +42,17 @@ export default function MyCategoryPage(){
             navigate(-1);
         }
     };
+    
+    const { user } = useAuth();
+    const { footprints } = useFootprints({ userId: user?.uid });
 
+    const filteredFootprints = useMemo(() => {
+        if (!categoryName) return [];
+        return footprints.filter(
+            (item) => item.category.toLowerCase() === categoryName.toLowerCase()
+
+        );
+    }, [footprints, categoryName]);
     
     return(
         <div 

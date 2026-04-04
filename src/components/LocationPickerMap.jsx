@@ -2,7 +2,7 @@
 import { useState, useCallback, useRef, useEffect } from "react";
 import { GoogleMap, Marker, useJsApiLoader } from "@react-google-maps/api";
 
-const LIBRARIES = ["places"]; // 검색 기능을 위해 places 라이브러리 추가
+const LIBRARIES = ["places", "maps"]; // 검색 기능을 위해 places 라이브러리 추가
 
 export default function LocationPickerMap({ keyword, onSelectLocation }) {
     const { isLoaded } = useJsApiLoader({

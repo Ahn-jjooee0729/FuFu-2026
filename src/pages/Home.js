@@ -8,13 +8,12 @@ import GoogleMapComponent from "../components/GoogleMap";
 import HomeBottomSheet from "../components/HomeBottomSheet";
 
 import { categories } from "../mock/categories";
-import { mockFootprints } from "../mock/footprints";
+import { useFootprints } from "../hooks/useFootprints";
 
 export default function Home(){
     const navigate = useNavigate();
     const {user}=useAuth();
 
-    //const [selectedCategory, setSelectedCategory ] = useState(null);
     const [inputValue, setInputValue] = useState("");
     const [searchKeyword, setSearchKeyword] = useState("");
     const [isSheetExpanded, setIsSheetExpanded] = useState(false);
@@ -42,15 +41,12 @@ export default function Home(){
     
     const normalizedKeyword = searchKeyword.trim().toLowerCase();
 
-    const filteredFootprints = mockFootprints.filter((item)=>{
-        // const matchCategory =
-        //     !selectedCategory || item.category === selectedCategory;
+    const { footprints, loading } = useFootprints();
 
+    const filteredFootprints = footprints.filter((item) => {
         const matchRegion = 
             normalizedKeyword === "" ||
             item.region.toLowerCase().includes(normalizedKeyword);
-
-        //return matchCategory && matchRegion;
         return matchRegion;
     });
 
@@ -62,10 +58,6 @@ export default function Home(){
             }
         : {lat: 37.5665, lng: 126.9780 };
 
-
-    // console.log("searchKeyword:", searchKeyword);
-    // console.log("filteredFootprints:", filteredFootprints);
-    
     return(
 
         <div

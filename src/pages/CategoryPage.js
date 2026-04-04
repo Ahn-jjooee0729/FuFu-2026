@@ -1,7 +1,7 @@
 import { useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import GoogleMapComponent from "../components/GoogleMap";
-import { mockFootprints } from "../mock/footprints";
+import { useFootprints } from "../hooks/useFootprints";
 
 export default function CategoryPage(){
     const navigate = useNavigate();
@@ -11,9 +11,11 @@ export default function CategoryPage(){
 
     const [searchText, setSearchText] = useState("");
 
-    const categoryFootprints = useMemo(()=>{
-        return mockFootprints.filter((item) => item.category === decodedCategoryName );
-    }, [decodedCategoryName]);
+    const { footprints } = useFootprints();
+
+    const categoryFootprints = useMemo(() => {
+        return footprints.filter((item) => item.category === decodedCategoryName);
+    }, [footprints, decodedCategoryName]);
 
     const filteredPosts = useMemo(() => {
         const keyword = searchText.trim().toLowerCase();
