@@ -58,6 +58,7 @@ export default function Upload(){
                 imageUrl,
                 placeName: selectedLocation.placeName,
                 address: selectedLocation.address || "",
+                region: selectedLocation.address || selectedLocation.placeName,
                 lat: selectedLocation.lat,
                 lng: selectedLocation.lng,
                 createdAt: serverTimestamp(),
@@ -80,7 +81,15 @@ export default function Upload(){
     }
 
     return (
-        <div style={{padding: 16, paddingBottom: 120}}>
+        <div 
+            style={{
+                height: "100%",
+                overflow: "auto",
+                padding: 16, 
+                paddingBottom: 120,
+                boxSizing: "border-box",
+            }}
+        >
             <h1>Upload Page</h1>
 
             {/*카테고리*/}

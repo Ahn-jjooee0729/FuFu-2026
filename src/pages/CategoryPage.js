@@ -10,6 +10,9 @@ export default function CategoryPage(){
     const decodedCategoryName = decodeURIComponent(categoryName || "");
 
     const [searchText, setSearchText] = useState("");
+    const [selectedPost, setSelectedPost] = useState(null);
+    const [isExpanded, setIsExpanded] = useState(false);
+    const [selectedCenter, setSelectedCenter] = useState(null);
 
     const { footprints } = useFootprints();
 
@@ -23,20 +26,33 @@ export default function CategoryPage(){
         if(!keyword) return categoryFootprints;
 
         return categoryFootprints.filter((item)=>{
-            return (
-                item.title.toLowerCase().includes(keyword) ||
-                item.region.toLowerCase().includes(keyword)
-            );
+            const titleText = (item.title || "").toLowerCase();
+            const regionText = (item.region || item.address || item.placeName || "").toLowerCase();
+            
+            return titleText.includes(keyword) || regionText.includes(keyword);
         });
     }, [categoryFootprints, searchText]);
 
     const mapCenter = 
-        filteredPosts.length > 0
-        ? {
-            lat: filteredPosts[0].lat,
-            lng: filteredPosts[0].lng,
-        }
-        : { lat: 37.5665, lng: 126.9780 };
+        selectedCenter ??
+        (filteredPosts.length > 0
+            ? {
+                lat: filteredPosts[0].lat,
+                lng: filteredPosts[0].lng,
+            }
+        : { lat: 37.5665, lng: 126.9780 });
+
+    const handlePostClick = (post) =>{
+        setSelectedCenter({
+            lat: Number(post.lat),
+            lng: Number(post.lng),
+        });
+        setSelectedPost(post);
+    };
+
+    const handleBackToList = () => {
+        setSelectedPost(null);
+    };
     
     return (
         <div
@@ -115,7 +131,9 @@ export default function CategoryPage(){
                     left: 0,
                     right: 0,
                     bottom: 0,
-                    height: 360,
+                    height: selectedPost
+                        ? (isExpanded ? "78vh" : "55vh")
+                        : (isExpanded ? "72vh" : "360px"),
                     background: "white",
                     borderTopLeftRadius: 28,
                     borderTopRightRadius: 28,
@@ -128,12 +146,14 @@ export default function CategoryPage(){
                 }}
             >
                 <div
+                    onClick={() => setIsExpanded((prev) => !prev)}
                     style={{
                         width: 48,
                         height: 5,
                         borderRadius: 999,
                         background: "#d1d5db",
                         margin: "0 auto 16px",
+                        cursor: "pointer",
                     }}
                 />
 
@@ -147,7 +167,8 @@ export default function CategoryPage(){
                     {decodedCategoryName}
                 </h2>
 
-                <div
+                {!selectedPost && (
+                    <div
                     style={{
                         display: "flex",
                         gap: 8,
@@ -183,7 +204,8 @@ export default function CategoryPage(){
                         Community
                     </button>
                 </div>
-
+                )}
+                
                 <div
                     style={{
                         flex: 1,
@@ -194,7 +216,84 @@ export default function CategoryPage(){
                         paddingRight: 4,
                     }}
                 >
-                    {filteredPosts.length === 0 ? (
+
+                {selectedPost ? (
+                    <div>
+                        <button
+                            type="button"
+                            onClick={handleBackToList}
+                            style={{
+                                marginBottom: 12,
+                                border: "none",
+                                background: "transparent",
+                                cursor: "pointer",
+                                color: "#6b7280",
+                                padding: 0,
+                                fontSize: 14,
+                            }}
+                        >
+                            ← Back
+                        </button>
+
+                        <div
+                            style={{
+                                fontSize: 13,
+                                color: "#6b7280",
+                                marginBottom: 8,
+                            }}
+                        >
+                            {selectedPost.address || selectedPost.region || selectedPost.placeName}
+                        </div>
+
+                        <h3
+                            style={{
+                                margin: "0 0 12px 0",
+                                fontSize: 22,
+                                fontWeight: 800,
+                                LineHeight: 1.3,
+                            }}
+                        >
+                            {selectedPost.title}
+                        </h3>
+
+                        <div
+                            style={{
+                                fontSize: 13,
+                                color: "#9ca3af",
+                                marginBottom: 16,
+                            }}
+                        >
+                            {selectedPost.category}
+                        </div>
+                        
+                        {selectedPost.imageUrl && (
+                            <img
+                                src={selectedPost.imageUrl}
+                                alt={selectedPost.title}
+                                style={{
+                                    width: "100%",
+                                    maxHeight: 220,
+                                    objectFit: "cover",
+                                    borderRadius: 16,
+                                    marginBottom: 16,
+                                    border: "1px solid #e5e7eb",
+                                }}
+                            />
+                        )}
+
+                        <p
+                            style={{
+                                fontSize: 15,
+                                color: "#374151",
+                                linHeight: 1.7,
+                                whiteSpace: "pre-wrap",
+                                margin: 0,
+                            }}
+                        >
+                            {selectedPost.content}
+                        </p>
+                    </div>
+                ) : filteredPosts.length === 0 ? (
                         <div
                             style={{
                                 color: "#6b7280",
@@ -209,6 +308,7 @@ export default function CategoryPage(){
                             <button
                                 key={post.id}
                                 type="button"
+                                onClick = {()=> handlePostClick(post)}
                                 style={{
                                     width: "100%",
                                     textAlign: "left",
@@ -236,7 +336,7 @@ export default function CategoryPage(){
                                         marginBottom: 4,
                                     }}
                                 >
-                                    {post.region}
+                                    {post.address || post.region || post.placeName}
                                 </div>
 
                                 <div

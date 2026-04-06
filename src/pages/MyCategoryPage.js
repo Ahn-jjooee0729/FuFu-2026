@@ -7,11 +7,25 @@ import GoogleMapComponent from "../components/GoogleMap";
 
 export default function MyCategoryPage(){
     const navigate = useNavigate();
+
     const {categoryName} = useParams();
+
     const [isSheetOpen, setIsSheetOpen] = useState(false);
     const [selectedFootprint, setSelectedFootprint] = useState(null);
     const [mapCenter, setMapCenter] = useState(null);
+    const [isExpanded, setIsExpanded] = useState(false);
 
+    const { user } = useAuth();
+    const { footprints } = useFootprints({ userId: user?.uid });
+
+    const filteredFootprints = useMemo(() => {
+        if (!categoryName) return [];
+        return footprints.filter(
+            (item) => item.category.toLowerCase() === categoryName.toLowerCase()
+
+        );
+    }, [footprints, categoryName]);
+    
     const defaultCenter = useMemo(() => {
         if(filteredFootprints.length > 0){
             return {
@@ -42,17 +56,6 @@ export default function MyCategoryPage(){
             navigate(-1);
         }
     };
-    
-    const { user } = useAuth();
-    const { footprints } = useFootprints({ userId: user?.uid });
-
-    const filteredFootprints = useMemo(() => {
-        if (!categoryName) return [];
-        return footprints.filter(
-            (item) => item.category.toLowerCase() === categoryName.toLowerCase()
-
-        );
-    }, [footprints, categoryName]);
     
     return(
         <div 
@@ -105,7 +108,9 @@ export default function MyCategoryPage(){
                     left: 0,
                     right: 0,
                     bottom: 0,
-                    height: isSheetOpen ? "55vh" : "140px",
+                    height: isSheetOpen 
+                        ? (isExpanded ? "78vh" : "55vh")
+                        : (isExpanded ? "72vh" : "360px"),
                     backgroundColor: "white",
                     borderTopLeftRadius: "24px",
                     borderTopRightRadius: "24px",
@@ -128,13 +133,15 @@ export default function MyCategoryPage(){
                         }}
                     >
                         {/*손잡이*/}
-                        <div    
+                        <div   
+                            onClick={() => setIsExpanded((prev) => !prev)} 
                             style={{
                                 width: 48,
                                 height: 5,
                                 borderRadius: 999,
                                 backgroundColor: "#d1d5db",
                                 margin: "0 auto 20px",
+                                cursor: "pointer",
                             }}
                         />
 
@@ -159,7 +166,7 @@ export default function MyCategoryPage(){
                                 {selectedFootprint.category}
                             </span>
                             <span style={{ fontSize: 12, color: "#9ca3af" }}>
-                                {selectedFootprint.region}
+                                {selectedFootprint.address || selectedFootprint.region || selectedFootprint.placeName}
                             </span>
                         </div>
 
@@ -185,11 +192,28 @@ export default function MyCategoryPage(){
                         />
 
                         {/*본문*/}
+                        {selectedFootprint.imageUrl && (
+                            <img
+                                src={selectedFootprint.imageUrl}
+                                alt={selectedFootprint.title}
+                                style={{
+                                    width: "100%",
+                                    maxHeight: 220,
+                                    objectFit: "cover",
+                                    borderRadius: 16,
+                                    marginBottom: 16,
+                                    border: "1px. solid #e5e7eb",
+                                }}
+                            />
+
+                        )}
                         <p
                             style={{
                                 fontSize: 15,
                                 color: "#374151",
                                 lineHeight: 1.7,
+                                whiteSpace: "pre-wrap",
+                                margin: 0,
                             }}
                         >
                             {selectedFootprint.content}
@@ -229,7 +253,7 @@ export default function MyCategoryPage(){
                                 }}
                             >
                                 <div>
-                                    <div style={{ fontSize: "20px", fontwight: "800" }}>
+                                    <div style={{ fontSize: "20px", fontWeight: "800" }}>
                                         {categoryName}
                                     </div>
                                     <div style={{ fontSize: "13px", color: "#6b7280" }}>
@@ -282,7 +306,7 @@ export default function MyCategoryPage(){
                                         </div>
                                         <div>
                                             <div style={{ fontWeight: "700" }}>
-                                                {item.region}
+                                                {item.address || item.region || item.placeName}
                                             </div>
                                             <div style={{ fontsize: "13px", color: "#6b7280"}}>
                                                 {item.title}

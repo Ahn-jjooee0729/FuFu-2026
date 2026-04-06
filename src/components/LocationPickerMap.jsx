@@ -2,10 +2,11 @@
 import { useState, useCallback, useRef, useEffect } from "react";
 import { GoogleMap, Marker, useJsApiLoader } from "@react-google-maps/api";
 
-const LIBRARIES = ["places", "maps"]; // 검색 기능을 위해 places 라이브러리 추가
+const LIBRARIES = ["places"]; // 검색 기능을 위해 places 라이브러리 추가
 
 export default function LocationPickerMap({ keyword, onSelectLocation }) {
     const { isLoaded } = useJsApiLoader({
+        id: "google-map-script",
         googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
         libraries: LIBRARIES,
     });
@@ -27,13 +28,17 @@ export default function LocationPickerMap({ keyword, onSelectLocation }) {
         );
 
         service.textSearch({ query: keyword, location: center, radius: 5000 }, (results, status) => {
+            console.log("검색어: ", keyword);
+            console.log("Places status: ", status);
+            console.log("Place results: ", results);
+            
             if (status === window.google.maps.places.PlacesServiceStatus.OK) {
                 setSearchResults(results.slice(0, 5)); // 상위 5개만
             } else {
                 setSearchResults([]);
             }
         });
-    }, [keyword, isLoaded]);
+    }, [keyword, isLoaded, center]);
 
     // 지도 클릭으로 위치 선택
     const handleMapClick = useCallback((e) => {
@@ -50,9 +55,11 @@ export default function LocationPickerMap({ keyword, onSelectLocation }) {
         const lat = place.geometry.location.lat();
         const lng = place.geometry.location.lng();
         const newPos = { lat, lng };
+
         setMarkerPosition(newPos);
         setCenter(newPos);
         mapRef.current?.panTo(newPos);
+
         onSelectLocation?.({
             lat,
             lng,

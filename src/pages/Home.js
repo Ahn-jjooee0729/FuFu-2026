@@ -44,10 +44,9 @@ export default function Home(){
     const { footprints, loading } = useFootprints();
 
     const filteredFootprints = footprints.filter((item) => {
-        const matchRegion = 
-            normalizedKeyword === "" ||
-            item.region.toLowerCase().includes(normalizedKeyword);
-        return matchRegion;
+        const regionText = (item.region || item.address || item.placeName || "").toLowerCase();
+
+        return normalizedKeyword === "" || regionText.includes(normalizedKeyword);
     });
 
     const mapCenter = 
