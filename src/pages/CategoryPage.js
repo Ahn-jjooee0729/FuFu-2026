@@ -50,8 +50,17 @@ export default function CategoryPage(){
         setSelectedPost(post);
     };
 
-    const handleBackToList = () => {
-        setSelectedPost(null);
+    const handleTopBack = () => {
+        if(selectedPost){
+            setSelectedPost(null);
+            setSelectedCenter(null);
+            return;
+        }
+        if (window.history.length > 1){
+            navigate(-1);
+        } else {
+            navigate("/home");
+        }
     };
     
     return (
@@ -91,7 +100,7 @@ export default function CategoryPage(){
             >
                 <button
                     type="button"
-                    onClick={() => navigate("/home")}
+                    onClick={ handleTopBack }
                     style={{
                         width: 42,
                         height: 42,
@@ -219,22 +228,6 @@ export default function CategoryPage(){
 
                 {selectedPost ? (
                     <div>
-                        <button
-                            type="button"
-                            onClick={handleBackToList}
-                            style={{
-                                marginBottom: 12,
-                                border: "none",
-                                background: "transparent",
-                                cursor: "pointer",
-                                color: "#6b7280",
-                                padding: 0,
-                                fontSize: 14,
-                            }}
-                        >
-                            ← Back
-                        </button>
-
                         <div
                             style={{
                                 fontSize: 13,

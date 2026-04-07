@@ -86,43 +86,6 @@ export default function HomeBottomSheet({
                     msOverflowStyle: "none",
                 }}
             >
-                {/* <button
-                    type="button"
-                    onClick={(e)=> {
-                        e.stopPropagation();
-                        onSelectCategory("All");
-                    }}
-                    style={{
-                        minWidth: 150,
-                        height: 180,
-                        borderRadius: 24,
-                        border:
-                            selectedCategory === "All"
-                            ? "2px solid black"
-                            : "1px solid #e5e7eb",
-                        background:
-                            selectedCategory ==="All" ? "#f9fafb" : "white",
-                        flex: "0 0 auto",
-                        cursor: "pointer",
-                        display: "flex",
-                        flexDirection: "column",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        gap: 14,
-                        padding: 16,
-                    }}
-                >
-                    <div style={{ fontSize: 42 }}>👣</div>
-                    <div
-                        style={{
-                            fontSize: 16,
-                            fontWeight: 600,
-                        }}
-                    >
-                        ALL
-                    </div>
-                    
-                </button> */}
 
                 {categories.map((category) => (
                     //const isActive = selectedCategory === category.name;
