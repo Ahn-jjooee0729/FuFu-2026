@@ -62,6 +62,10 @@ export default function CategoryPage(){
             navigate("/home");
         }
     };
+
+    const handleEnterCommunity = () => {
+        navigate(`/category/${encodeURIComponent(decodedCategoryName)}/community`);
+    };
     
     return (
         <div
@@ -180,7 +184,8 @@ export default function CategoryPage(){
                     <div
                     style={{
                         display: "flex",
-                        gap: 8,
+                        flexDirection: "column",
+                        gap: 10,
                         marginBottom: 12,
                     }}
                 >
@@ -190,7 +195,7 @@ export default function CategoryPage(){
                         value={searchText}
                         onChange={(e) => setSearchText(e.target.value)}
                         style={{
-                            flex: 1,
+                            width: "100%",
                             padding: 12,
                             borderRadius: 12,
                             border: "1px solid #d1d5db",
@@ -200,17 +205,20 @@ export default function CategoryPage(){
 
                     <button
                         type="button"
+                        onClick={handleEnterCommunity}
                         style={{
-                            padding: "0 14px",
-                            borderRadius: 12,
+                            width: "100%",
+                            height: 48,
+                            borderRadius: 14,
                             border: "none",
                             background: "black",
                             color: "white",
                             cursor: "pointer",
-                            whiteSpace: "nowrap",
+                            fontWeight: 600,
+                            fontSize: 15,
                         }}
                     >
-                        Community
+                        Enter Community
                     </button>
                 </div>
                 )}

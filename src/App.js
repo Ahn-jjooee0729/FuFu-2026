@@ -7,6 +7,7 @@ import FollowingPageScreen from "./pages/FollowingPageScreen.js";
 import Upload from "./pages/Upload.js";
 import CategoryPage from "./pages/CategoryPage";
 import MyCategoryPage from "./pages/MyCategoryPage.js";
+import CommunityPage from "./pages/CommunityPage.js";
 
 
 import {AuthProvider} from "./AuthContext";
@@ -35,6 +36,7 @@ function App(){
               <Route path="/upload" element={<Upload />} />
               <Route path="/category/:categoryName" element={<CategoryPage />} />
               <Route path="/mypage/category/:categoryName" element={<MyCategoryPage />}/>
+              <Route path="/category/:categoryName/community" element={<CommunityPage />} />
           </Route>
           
           <Route path="*" element={<Navigate to="/home" replace />} />
