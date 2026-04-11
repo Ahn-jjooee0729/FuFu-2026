@@ -24,6 +24,9 @@ function Signup(){
             //Firestore에 사용자 저장
             await setDoc(doc(db, "users", user.uid),{
                 email: user.email,
+                nickname: user.email.split("@")[0],
+                following: [],
+                followers: [],
                 createdAt: new Date(),
             });
 

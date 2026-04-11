@@ -1,13 +1,33 @@
-import {useAuth} from "../AuthContext";
-import { useMemo } from "react";
+import { useAuth } from "../AuthContext";
+import { useMemo, useEffect, useState } from "react";
 import { categories } from "../mock/categories";
-import {useNavigate} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useFootprints } from "../hooks/useFootprints";
+import { db } from "../firebase";
+import { doc, getDoc } from "firebase/firestore";
+
 
 export default function MyPageScreen(){
+    const [followingCount, setFollowingCount] = useState(0);
+
     const {user}=useAuth();
     const { footprints } = useFootprints({userId: user?.uid});
 
+    useEffect (() => {
+        const fetchFollowingCount = async () => {
+            if (!user?.uid) return;
+
+            const userRef = doc(db, "users", user.uid);
+            const snap = await getDoc(userRef);
+
+            if (snap.exists()){
+                const data = snap.data();
+                setFollowingCount((data.following || []).length);
+            }
+        };
+
+        fetchFollowingCount();
+    }, [user]);
     const navigate = useNavigate();
 
     const nickname = user?.email ? user.email.split("@")[0] : "닉네임";
@@ -111,7 +131,9 @@ export default function MyPageScreen(){
                             >
                                 Following
                             </div>
-                            <div style={{ fontSize: "18px", fontWeight: "700", color: "#111" }}>14</div>
+                            <div style={{ fontSize: "18px", fontWeight: "700", color: "#111" }}>
+                                {followingCount}
+                            </div>
                         </div>
                     </div>
                 </div>

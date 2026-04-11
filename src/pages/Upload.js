@@ -6,6 +6,7 @@ import { categories } from "../mock/categories";
 import { auth, db, storage } from "../firebase";
 import { addDoc, collection, serverTimestamp } from "firebase/firestore";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import heic2any from "heic2any";
 
 
 export default function Upload(){
@@ -20,10 +21,53 @@ export default function Upload(){
     const [placeKeyword, setPlaceKeyword] = useState(""); //검색창 입력값
     const [selectedLocation, setSelectedLocation] = useState(null); //사용자가 고른 위치 정보
 
-    const handleImageChange = (e)=>{
+    const handleImageChange = async (e) => {
         const file = e.target.files[0];
-        setImage(file);
+
+        if(!file) return;
+
+        let finalFile = file;
+
+        const isHeicLike = 
+            file.type === "image/heic" ||
+            file.type === "image/heif" ||
+            /\.(heic|heif)$/i.test(file.name);
+        
+            if (isHeicLike) {
+                try{
+                    const buffer = await file.arrayBuffer();
+
+                    const inputBlob = new Blob([buffer], {
+                        type: file.type || "image/heic",
+                    });
+
+                    const converted = await heic2any({
+                        blob: inputBlob,
+                        toType: "image/jpeg",
+                        quality: 0.9,
+                    });
+
+                    const jpgBlob = Array.isArray(converted) ? converted[0] : converted;
+
+                    finalFile = new File(
+                        [jpgBlob],
+                        file.name.replace(/\.(heic|heif)$/i, ".jpg"),
+                        { type: "image/jpeg" }
+                    );
+                } catch (error) {
+                    console.error("HEIC 변환 오류: ", error);
+                    alert("이 HEIC 파일은 변환할 수 없습니다. JPG 또는 PNG로 변환하여 올려주세요.");
+                    return;
+                }
+            }
+
+            setImage(finalFile);
     };
+
+    // const handleImageChange = (e)=>{
+    //     const file = e.target.files[0];
+    //     setImage(file);
+    // };
 
     const handleSubmit = async()=>{
         if(!category || !title || !content || !image || !selectedLocation){

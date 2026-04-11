@@ -8,6 +8,8 @@ import Upload from "./pages/Upload.js";
 import CategoryPage from "./pages/CategoryPage";
 import MyCategoryPage from "./pages/MyCategoryPage.js";
 import CommunityPage from "./pages/CommunityPage.js";
+import CommunityUpload from "./pages/CommunityUpload.js";
+
 
 
 import {AuthProvider} from "./AuthContext";
@@ -37,9 +39,14 @@ function App(){
               <Route path="/category/:categoryName" element={<CategoryPage />} />
               <Route path="/mypage/category/:categoryName" element={<MyCategoryPage />}/>
               <Route path="/category/:categoryName/community" element={<CommunityPage />} />
+              <Route path="/category/:categoryName/community/upload" element={<CommunityUpload />} />
           </Route>
           
           <Route path="*" element={<Navigate to="/home" replace />} />
+          <Route
+            path="/category/:categoryName/community/upload"
+            element={<CommunityUpload />}
+          />
         </Routes>
       </AuthProvider>
     </BrowserRouter>

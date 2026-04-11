@@ -1,3 +1,4 @@
+import { ensureUserDocument } from "../services/userService";
 import { useState, useEffect } from "react";
 import {auth} from "../firebase";
 import { signInWithEmailAndPassword } from "firebase/auth";
@@ -47,7 +48,8 @@ const getLoginErrorMessage = (error) =>{
         }
 
         try{
-            await signInWithEmailAndPassword(auth, email, password);
+            const userCredentail = await signInWithEmailAndPassword(auth, email, password);
+            await ensureUserDocument(userCredentail.user);
             alert("Login Successful!");
             navigate("/home");
         } catch(error){
