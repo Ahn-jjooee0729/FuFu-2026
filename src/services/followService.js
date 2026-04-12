@@ -31,12 +31,21 @@ export const unfollowUser = async (myUid, targetUid)=> {
 };
 
 export const getFollowingIds = async (myUid) =>{
-    if (!myUid) return [];
+    if (!myUid) {
+        console.log("myUid 없음");
+        return [];
+    }
 
     const myRef = doc(db, "users", myUid);
     const snap = await getDoc(myRef);
 
+    console.log("getFollowingIds - uid: ", myUid);
+    console.log("getFollowingIds - exists: ", snap.exists());
+
     if (!snap.exists()) return [];
 
-    return snap.data.following || [];
+    const data = snap.data();
+    console.log("getFollowingIds - user data: ", data);
+
+    return data.following || [];
 };

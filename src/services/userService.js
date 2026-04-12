@@ -43,5 +43,18 @@ export const getUserDocument = async (uid) => {
     const snap = await getDoc(userRef);
 
     if(!snap.exists()) return null;
-    return snap.data();
+    return { id: uid, ...snap.data() };
+};
+
+export const getUsersByIds = async (uids = []) =>{
+    if (!uids.length) return [];
+
+    const results = await Promise.all(
+        uids.map(async (uid) => {
+            const userData = await getUserDocument(uid);
+            return userData;
+        })
+    );
+
+    return results.filter(Boolean);
 };
