@@ -1,18 +1,24 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import GoogleMapComponent from "../components/GoogleMap";
 import { useFootprints } from "../hooks/useFootprints";
+import { useAuth } from "../AuthContext";
+import { getFollowingIds, followUser, unfollowUser } from "../services/followService";
+
 
 export default function CategoryPage(){
     const navigate = useNavigate();
     const { categoryName } = useParams();
-    
+    const { user } = useAuth();
+
     const decodedCategoryName = decodeURIComponent(categoryName || "");
 
     const [searchText, setSearchText] = useState("");
     const [selectedPost, setSelectedPost] = useState(null);
     const [isExpanded, setIsExpanded] = useState(false);
     const [selectedCenter, setSelectedCenter] = useState(null);
+    const [myFollowingIds, setMyFollowingIds] = useState([]);
+    const [followLoading, setFollowLoading] = useState(false);
 
     const { footprints } = useFootprints();
 
@@ -42,6 +48,17 @@ export default function CategoryPage(){
             }
         : { lat: 37.5665, lng: 126.9780 });
 
+    useEffect(() => {
+           const fetchMyFollowingIds = async () =>{
+            if (!user?.uid) return;
+
+            const ids = await getFollowingIds(user.uid);
+            setMyFollowingIds(ids);
+        };
+
+        fetchMyFollowingIds();
+    }, [user]);
+
     const handlePostClick = (post) =>{
         setSelectedCenter({
             lat: Number(post.lat),
@@ -66,6 +83,36 @@ export default function CategoryPage(){
     const handleEnterCommunity = () => {
         navigate(`/category/${encodeURIComponent(decodedCategoryName)}/community`);
     };
+
+    const isOwnPost = selectedPost?.userId === user?.uid;
+    const isFollowingAuthor = selectedPost?.userId
+        ? myFollowingIds.includes(selectedPost.userId)
+        : false;
+    
+    const handleToggleFollow = async () => {
+        if (!user?.uid || !selectedPost?.userId) return;
+        if (user.uid === selectedPost.userId) return;
+
+        try {
+            setFollowLoading(true);
+
+            if (isFollowingAuthor){
+                await unfollowUser(user.uid, selectedPost.userId);
+                setMyFollowingIds((prev) => 
+                    prev.filter((id) => id !== selectedPost.userId)
+                );
+            } else {
+                await followUser(user.uid, selectedPost.userId);
+                setMyFollowingIds((prev) => [...prev, selectedPost.userId]);
+            }
+        } catch (error) {
+            console.error("follow toggle error:", error);
+            alert("팔로우 처리 중 오류가 발생했습니다.");
+        } finally {
+            setFollowLoading(false);
+        }
+    };
+    
     
     return (
         <div
@@ -181,7 +228,7 @@ export default function CategoryPage(){
                 </h2>
 
                 {!selectedPost && (
-                    <div
+                <div
                     style={{
                         display: "flex",
                         flexDirection: "column",
@@ -246,12 +293,56 @@ export default function CategoryPage(){
                             {selectedPost.address || selectedPost.region || selectedPost.placeName}
                         </div>
 
+                        {/*작성자 + 팔로우버튼*/}
+                        <div
+                            style={{
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "space-between",
+                                marginBottom: 12,
+                                gap: 12,
+                            }}
+                        >
+                            <div
+                                style={{
+                                    fontSize: 13,
+                                    color: "#6b7280",
+                                }}
+                            >
+                                bt {selectedPost.userEmail || "unknown"}
+                            </div>
+
+                            {!isOwnPost && (
+                                <button
+                                    type="button"
+                                    onClick={handleToggleFollow}
+                                    disabled={followLoading}
+                                    style={{
+                                        border: "none",
+                                        borderradius: 999,
+                                        padding: "8px 14px",
+                                        background: isFollowingAuthor ? "#111827" : "#f3f4f6",
+                                        color: isFollowingAuthor ? "white" : "#111827",
+                                        cursor: "pointer",
+                                        fontSize: 12,
+                                        fontWeight: 600,
+                                    }}
+                                >
+                                    {followLoading
+                                        ? "Loading..."
+                                        : isFollowingAuthor
+                                        ? "Following"
+                                        : "Follow"}
+                                </button>
+                            )}
+                        </div>
+                        
                         <h3
                             style={{
                                 margin: "0 0 12px 0",
                                 fontSize: 22,
                                 fontWeight: 800,
-                                LineHeight: 1.3,
+                                lineHeight: 1.3,
                             }}
                         >
                             {selectedPost.title}
@@ -286,7 +377,7 @@ export default function CategoryPage(){
                             style={{
                                 fontSize: 15,
                                 color: "#374151",
-                                linHeight: 1.7,
+                                lineHeight: 1.7,
                                 whiteSpace: "pre-wrap",
                                 margin: 0,
                             }}
