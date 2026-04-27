@@ -61,7 +61,7 @@ function Signup(){
             <button onClick={handleSignup}>Registration</button>
             <br />
             
-            Already have an account?<Link>Login</Link>
+            Already have an account?<Link to="/">Login</Link>
 
         </div>  
         </Container>

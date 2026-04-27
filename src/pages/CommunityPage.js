@@ -183,6 +183,9 @@ export default function CommunityPage(){
                     {filteredPosts.map((post) => (
                         <div
                             key={post.id}
+                            onClick={() =>
+                                navigate(`/category/${encodeURIComponent(decodedCategoryName)}/community/${post.id}`)
+                            }
                             style={{
                                 background: "white",
                                 borderRadius: 18,

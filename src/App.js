@@ -9,6 +9,7 @@ import CategoryPage from "./pages/CategoryPage";
 import MyCategoryPage from "./pages/MyCategoryPage.js";
 import CommunityPage from "./pages/CommunityPage.js";
 import CommunityUpload from "./pages/CommunityUpload.js";
+import CommunityDetailPage from "./pages/CommunityDetailPage.js";
 
 
 
@@ -40,6 +41,10 @@ function App(){
               <Route path="/mypage/category/:categoryName" element={<MyCategoryPage />}/>
               <Route path="/category/:categoryName/community" element={<CommunityPage />} />
               <Route path="/category/:categoryName/community/upload" element={<CommunityUpload />} />
+              <Route
+                path="/category/:categoryName/community/:postId"
+                element={<CommunityDetailPage />}
+              />
           </Route>
           
           <Route path="*" element={<Navigate to="/home" replace />} />
