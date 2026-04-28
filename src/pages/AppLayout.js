@@ -19,7 +19,7 @@ export default function AppLayout(){
             <div
                 style={{
                     width: "100%",
-                    height: "calc(100% - 64px)",
+                    height: "100%",
                     position: "relative",
                 }}
             >

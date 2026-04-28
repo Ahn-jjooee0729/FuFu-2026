@@ -10,6 +10,8 @@ import HomeBottomSheet from "../components/HomeBottomSheet";
 import { categories } from "../mock/categories";
 import { useFootprints } from "../hooks/useFootprints";
 
+import uploadIcon from "../assets/icons/upload-icon.svg";
+
 export default function Home(){
     const navigate = useNavigate();
     const {user}=useAuth();
@@ -149,17 +151,30 @@ export default function Home(){
                 type="button"
                 onClick={() => navigate("/upload")}
                 style={{
-                    width: 46,
-                    height: 46,
+                    width: 50,
+                    height: 50,
                     borderRadius: "50%",
                     border: "none",
                     background: "white",
-                    boxShadow: "0 2px 10px rgba(0,0,0,0.08)",
-                    fontSize: 22,
+                    boxShadow: "0 4px 14px rgba(0,0,0,0.12)",
                     cursor: "pointer",
+                    padding: 0,
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    flexShrink: 0,
                 }}    
             >
-              +
+              <img
+                src={uploadIcon}
+                alt="Upload"
+                style={{
+                    width: 50,
+                    height: 50,
+                    objectFit: "contain",
+                    display: "block",
+                }}
+                />
             </button>
         </div>
 

@@ -1,27 +1,27 @@
 export const categories = [
     {
         id: 1,
-        name: "Nature",
+        name: "Read",
         emoji: "🌿"
     },
     {
         id: 2,
-        name: "Restaurant",
+        name: "Sport",
         emoji: "🍜"
     },
     {
         id: 3,
-        name: "Accomodation",
+        name: "Stay",
         emoji: "🛏️"
     },
     {
         id: 4,
-        name: "Cafe",
+        name: "Food",
         emoji: "🍰"
     },
     {
         id: 5,
-        name: "Walking",
+        name: "Walk",
         emoji: "🚶"
     },
 ];
