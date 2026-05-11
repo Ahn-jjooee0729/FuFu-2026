@@ -2,254 +2,271 @@ import { useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useCommunityPosts } from "../hooks/useCommunityPosts";
 
-export default function CommunityPage(){
+const CATEGORY_COLOR = {
+    Read: "#F8DDEC",
+    Stay: "#DCEFFF",
+    Food: "#FFD0D6",
+    Walk: "#DDF4E6",
+    Sport: "#EDFF75",
+};
+
+export default function CommunityPage() {
     const navigate = useNavigate();
     const { categoryName } = useParams();
+
     const decodedCategoryName = decodeURIComponent(categoryName || "");
-    
+    const categoryColor = CATEGORY_COLOR[decodedCategoryName] || "#EDFF75";
+
     const [searchText, setSearchText] = useState("");
 
-    const {posts, loading } =useCommunityPosts({
+    const { posts, loading } = useCommunityPosts({
         category: decodedCategoryName,
     });
 
     const filteredPosts = useMemo(() => {
-        const keyword = searchText.trim().toLowerCase();
+    const keyword = searchText.trim().toLowerCase();
 
-        if(!keyword) return posts;
+        if (!keyword) return posts;
 
         return posts.filter((post) => {
-            const titleText = (post.title || "").toLowerCase();
-            const contentText = (post.content || "").toLowerCase();
-            const userNametext = (post.userName || "").toLowerCase();
+        const titleText = (post.title || "").toLowerCase();
+        const contentText = (post.content || "").toLowerCase();
+        const userNameText = (post.userName || "").toLowerCase();
 
-            return (
-                titleText.includes(keyword) ||
-                contentText.includes(keyword) ||
-                userNametext.includes(keyword)
-            );
+        return (
+            titleText.includes(keyword) ||
+            contentText.includes(keyword) ||
+            userNameText.includes(keyword)
+        );
         });
     }, [posts, searchText]);
 
     const handleBack = () => {
-        if (window.history.length > 1){
-            navigate(-1);
-        } else {
-            navigate(`/category/${encodeURIComponent(decodedCategoryName)}`);
-        }
+        navigate(-1);
     };
 
     const handleWritePost = () => {
         navigate(`/category/${encodeURIComponent(decodedCategoryName)}/community/upload`);
     };
 
-    const formatData = (createdAt) => {
+    const formatDate = (createdAt) => {
         if (!createdAt?.toDate) return "";
-        const data = createdAt.toDate();
+        const date = createdAt.toDate();
 
-        const year = data.getFullYear();
-        const month = `${data.getMonth() +1}`.padStart(2,"0");
-        const day = `${data.getDate()}`.padStart(2, "0");
+        const year = date.getFullYear();
+        const month = `${date.getMonth() + 1}`.padStart(2, "0");
+        const day = `${date.getDate()}`.padStart(2, "0");
 
         return `${year}.${month}.${day}`;
     };
 
+    const makePreview = (text = "") => {
+        if (text.length <= 30) return text;
+        return `${text.slice(0, 30)}...`;
+    };
+
     return (
-        <div
-            style={{
-                height: "100%",
-                overflowY: "auto",
-                background: "#f8f8f8",
-                padding: "16px 16px 100px",
-                boxSizing: "border-box",
-            }}
-        >
-            {/* 상단 헤더 */}
-            <div
-                style={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: 10,
-                    marginBottom: 16,
-                    position: "sticky",
-                    top: 0,
-                    zIndex: 10,
-                    background: "#f8f8f8",
-                    paddingBottom: 12,
-                }}
-            >
-                <button
-                    type="button"
-                    onClick={handleBack}
-                    style={{
-                        width: 42,
-                        height: 42,
-                        borderRadius: "50%",
-                        border: "none",
-                        background: "white",
-                        boxShadow: "0 2px 10px rgba(0,0,0,0.08)",
-                        cursor: "pointer",
-                        fontSize: 18,
-                        flexShrink: 0,
-                    }}
-                >
-                    ←
-                </button>
+    <div
+        style={{
+        height: "100%",
+        overflowY: "auto",
+        background: `linear-gradient(
+            to bottom,
+            ${categoryColor} 0%,
+            rgba(255,255,255,0.96) 22%,
+            white 100%
+        )`,
+        padding: "32px 16px 120px",
+        boxSizing: "border-box",
+        }}
+    >
+        <div style={headerStyle}>
+        <button type="button" onClick={handleBack} style={backButtonStyle}>
+            ‹
+        </button>
 
-                <div
-                    style={{
-                        flex: 1,
-                        height: 42,
-                        background: "white",
-                        borderRadius: 999,
-                        display: "flex",
-                        alignItems: "center",
-                        padding: "0 14px",
-                        boxShadow: "0 2px 10px rgba(0,0,0,0.08)",
-                        fontSize: 15,
-                        fontWeight: 600,
-                    }}
-                >
-                    {decodedCategoryName} Community
-                </div>
-            </div>
-
-            {/*검색창*/}
-            <div style={{ marginBottom: 16 }}>
-                <input
-                    type="text"
-                    placeholder="Search community posts"
-                    value={searchText}
-                    onChange={(e) => setSearchText(e.target.value)}
-                    style={{
-                        width: "100%",
-                        height: 48,
-                        borderRadius: 14,
-                        border: "1px solid #d1d5db",
-                        padding: "0 14px",
-                        boxSizing: "border-box",
-                        fontSize: 14,
-                        background: "white",
-                    }}
-                />
-            </div>
-
-            <button
-                onClick={handleWritePost}
-                style={{
-                    width: "100%",
-                    height: 48,
-                    background: "black",
-                    color: "white",
-                    borderRadius: 12,
-                    border: "none",
-                    marginBottom: 16,
-                }}
-            >
-                Write Post
-            </button>
-
-            {loading ? (
-                <div
-                    style={{
-                        color: "#6b7280",
-                        fontSize: 14,
-                    }}
-                >
-                    Loading...
-                </div>
-            ) : filteredPosts.length === 0 ? (
-                <div
-                    style={{
-                        background: "whtie",
-                        borderRadius: 18,
-                        padding: "24px 20px",
-                        border: "1px solid #ececec",
-                        color: "#6b7280",
-                        fontSize: 14,
-                        lineHeight: 1.6,
-                    }}
-                >
-                    아직 커뮤니티 글이 없습니다.
-                </div>
-            ) : (
-                <div
-                    style={{
-                        display: "flex",
-                        flexDirection: "column",
-                        gap: 12,
-                    }}
-                >
-                    {filteredPosts.map((post) => (
-                        <div
-                            key={post.id}
-                            onClick={() =>
-                                navigate(`/category/${encodeURIComponent(decodedCategoryName)}/community/${post.id}`)
-                            }
-                            style={{
-                                background: "white",
-                                borderRadius: 18,
-                                padding: 16,
-                                boxShadow: "0 4px 12px rgba(0,0,0,0.04)",
-                                border: "1px solid #ececec",
-                            }}
-                        >
-                            <div
-                                style={{
-                                    display: "flex",
-                                    alignItems: "center",
-                                    justifyContent: "space-between",
-                                    gap: 10,
-                                    marginBottom: 10,
-                                }}
-                            >
-                                <div
-                                    style={{
-                                        fontSize: 13,
-                                        color: "#6b7280",
-                                        fontWeight: 600,
-                                    }}
-                                >
-                                    {post.userName || "익명 사용자"}
-                                </div>
-
-                                <div
-                                    style={{
-                                        fontSize: 12,
-                                        color: "#9ca3af",
-                                        flexShrink: 0,
-                                    }}
-                                >
-                                    {formatData(post.createdAt)}
-                                </div>
-                            </div>
-
-                            <div
-                                style={{
-                                    fontSize: 18,
-                                    fontWeight: 700,
-                                    color: "#111827",
-                                    marginBottom: 10,
-                                    lineHeight: 1.35,
-                                }}
-                            >
-                                {post.title}
-                            </div>
-
-                            <div
-                                style={{
-                                    fontSize: 14,
-                                    color: "#4b5563",
-                                    lineHeight: 1.6,
-                                    whiteSpace: "pre-wrap",
-                                }}
-                            >
-                                {post.content}
-                            </div>
-                        </div>
-                    ))}
-                </div>
-            )}
+        <div style={{ textAlign: "center" }}>
+            <h1 style={titleStyle}>{decodedCategoryName}</h1>
+            <div style={subtitleStyle}>Community</div>
         </div>
+
+        <button type="button" onClick={handleWritePost} style={writeButtonStyle}>
+            +
+        </button>
+        </div>
+
+        <div style={searchBoxStyle}>
+        <span style={searchIconStyle}>⌕</span>
+        <input
+            type="text"
+            placeholder="Search Posts"
+            value={searchText}
+            onChange={(e) => setSearchText(e.target.value)}
+            style={searchInputStyle}
+        />
+        </div>
+
+        {loading ? (
+        <div style={emptyStyle}>Loading...</div>
+        ) : filteredPosts.length === 0 ? (
+        <div style={emptyStyle}>아직 커뮤니티 글이 없습니다.</div>
+        ) : (
+        <div style={postListStyle}>
+            {filteredPosts.map((post) => (
+            <button
+                key={post.id}
+                type="button"
+                onClick={() =>
+                navigate(
+                    `/category/${encodeURIComponent(
+                    decodedCategoryName
+                    )}/community/${post.id}`
+                )
+                }
+                style={postItemStyle}
+            >
+                <div style={postTitleStyle}>{post.title}</div>
+
+                <div style={postPreviewStyle}>{makePreview(post.content)}</div>
+
+                <div style={postMetaRowStyle}>
+                    <div style={postMetaLeftStyle}>
+                        <span>{post.userName || "익명 사용자"}</span>
+                    </div>
+                
+                    <span style={postMetaRightStyle}>{formatDate(post.createdAt)}</span>
+                </div>
+            </button>
+            ))}
+        </div>
+        )}
+    </div>
     );
 }
+
+const headerStyle = {
+    display: "grid",
+    gridTemplateColumns: "48px 1fr 48px",
+    alignItems: "center",
+    marginBottom: 28,
+};
+
+const backButtonStyle = {
+    border: "none",
+    background: "transparent",
+    fontSize: 42,
+    lineHeight: 1,
+    cursor: "pointer",
+    color: "#111",
+    padding: 0,
+};
+
+const titleStyle = {
+    margin: 0,
+    fontSize: 28,
+    fontWeight: 900,
+    color: "#000",
+    lineHeight: 1,
+};
+
+const subtitleStyle = {
+    marginTop: 4,
+    fontSize: 13,
+    color: "rgba(0,0,0,0.4)",
+};
+
+const writeButtonStyle = {
+    width: 40,
+    height: 40,
+    borderRadius: "50%",
+    border: "none",
+    background: "#1A1A1A",
+    color: "white",
+    fontSize: 42,
+    lineHeight: 1,
+    cursor: "pointer",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    paddingBottom: 4,
+};
+
+const searchBoxStyle = {
+    height: 64,
+    borderRadius: 24,
+    background: "white",
+    display: "flex",
+    alignItems: "center",
+    padding: "0 18px",
+    boxSizing: "border-box",
+    boxShadow: "0 8px 24px rgba(0,0,0,0.08)",
+    marginBottom: 32,
+};
+
+const searchIconStyle = {
+    fontSize: 42,
+    lineHeight: 1,
+    marginRight: 14,
+    color: "#111",
+};
+
+const searchInputStyle = {
+    flex: 1,
+    border: "none",
+    outline: "none",
+    background: "transparent",
+    fontSize: 20,
+    color: "#111",
+};
+
+const postListStyle = {
+    display: "flex",
+    flexDirection: "column",
+};
+
+const postItemStyle = {
+    width: "100%",
+    border: "none",
+    borderBottom: "1px solid rgba(0,0,0,0.12)",
+    background: "transparent",
+    textAlign: "left",
+    padding: "24px 10px 18px",
+    cursor: "pointer",
+};
+
+const postTitleStyle = {
+    fontSize: 20,
+    fontWeight: 800,
+    color: "#111",
+    marginBottom: 12,
+};
+
+const postPreviewStyle = {
+    fontSize: 14,
+    color: "#9ca3af",
+    lineHeight: 1.5,
+    marginBottom: 28,
+};
+
+const postMetaRowStyle = {
+    display: "flex",
+    alignItems: "center",
+    fontSize: 13,
+    color: "#b8b8b8",
+};
+
+const postMetaLeftStyle = {
+    display: "flex",
+    gap: 18,
+    alignItems: "center",
+};
+
+const postMetaRightStyle = {
+    marginLeft: "auto",
+};
+
+const emptyStyle = {
+    color: "#9ca3af",
+    fontSize: 15,
+    padding: "24px 10px",
+};

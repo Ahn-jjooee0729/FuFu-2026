@@ -1,11 +1,11 @@
 import { useCallback, useMemo, useRef } from "react";
 import { GoogleMap as GMap, Marker, useJsApiLoader } from "@react-google-maps/api";
 
-import footprintGreen from "../assets/footprints/footprint-green.svg";
-import footprintNeon from "../assets/footprints/footprint-neon.svg";
-import footprintPink from "../assets/footprints/footprint-pink.svg";
-import footprintBlue from "../assets/footprints/footprint-blue.svg";
-import footprintSoftPink from "../assets/footprints/footprint-soft-pink.svg";
+import footprintGreen from "../assets/icons/walkIcon.svg";
+import footprintNeon from "../assets/icons/sportIcon.svg";
+import footprintPink from "../assets/icons/foodIcon.svg";
+import footprintBlue from "../assets/icons/stayIcon.svg";
+import footprintSoftPink from "../assets/icons/readIcon.svg";
 
 const DEFAULT_CENTER = { lat: 37.5665, lng: 126.9780 };
 const LIBRARIES = ["places"];

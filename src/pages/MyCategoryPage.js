@@ -1,5 +1,7 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { useMemo, useState, useEffect } from "react";
+import { doc, deleteDoc } from "firebase/firestore";
+import { db } from "../firebase";
 import { useFootprints } from "../hooks/useFootprints";
 import { useAuth } from "../AuthContext";
 import GoogleMapComponent from "../components/GoogleMap";
@@ -18,6 +20,7 @@ export default function MyCategoryPage() {
 
   const filteredFootprints = useMemo(() => {
     if (!categoryName) return [];
+
     return footprints.filter(
       (item) => item.category?.toLowerCase() === categoryName.toLowerCase()
     );
@@ -30,6 +33,7 @@ export default function MyCategoryPage() {
         lng: Number(filteredFootprints[0].lng),
       };
     }
+
     return { lat: 37.5665, lng: 126.9780 };
   }, [filteredFootprints]);
 
@@ -74,13 +78,32 @@ export default function MyCategoryPage() {
     }
   };
 
+  const handleDeleteFootprint = async () => {
+    if (!selectedFootprint?.id) return;
+
+    const ok = window.confirm("이 게시글을 삭제할까요?");
+    if (!ok) return;
+
+    try {
+      await deleteDoc(doc(db, "footprints", selectedFootprint.id));
+
+      alert("삭제되었습니다.");
+      setSelectedFootprint(null);
+      setIsExpanded(false);
+      setMapCenter(null);
+    } catch (error) {
+      console.error("delete footprint error:", error);
+      alert("삭제 중 오류가 발생했습니다.");
+    }
+  };
+
   const sheetHeight = selectedFootprint
     ? isExpanded
       ? "78vh"
       : "55vh"
     : isSheetOpen
-      ? "55vh"
-      : "140px";
+    ? "55vh"
+    : "230px";
 
   return (
     <div
@@ -148,7 +171,7 @@ export default function MyCategoryPage() {
         {selectedFootprint ? (
           <div
             style={{
-              padding: "10px 20px 40px",
+              padding: "10px 20px 120px",
               overflow: "auto",
               flex: 1,
             }}
@@ -184,6 +207,7 @@ export default function MyCategoryPage() {
               >
                 {selectedFootprint.category}
               </span>
+
               <span style={{ fontSize: 12, color: "#9ca3af" }}>
                 {selectedFootprint.address ||
                   selectedFootprint.region ||
@@ -236,6 +260,25 @@ export default function MyCategoryPage() {
             >
               {selectedFootprint.content}
             </p>
+
+            <button
+              type="button"
+              onClick={handleDeleteFootprint}
+              style={{
+                width: "100%",
+                height: 38,
+                borderRadius: 999,
+                border: "none",
+                background: "#e5e7eb",
+                color: "#6b7280",
+                fontSize: 13,
+                fontWeight: 600,
+                cursor: "pointer",
+                marginTop: 24,
+              }}
+            >
+              삭제하기
+            </button>
           </div>
         ) : (
           <>
@@ -259,6 +302,7 @@ export default function MyCategoryPage() {
                   marginBottom: "14px",
                 }}
               />
+
               <div
                 style={{
                   width: "100%",
@@ -277,6 +321,7 @@ export default function MyCategoryPage() {
                     My Footprints: {filteredFootprints.length}
                   </div>
                 </div>
+
                 <div style={{ fontSize: "14px", color: "#6b7280" }}>
                   {isSheetOpen ? "close" : "open"}
                 </div>
@@ -287,7 +332,7 @@ export default function MyCategoryPage() {
               style={{
                 flex: 1,
                 overflow: "auto",
-                padding: "0 16px 20px",
+                padding: "0 16px 110px",
               }}
             >
               {filteredFootprints.length === 0 ? (
@@ -321,6 +366,7 @@ export default function MyCategoryPage() {
                     >
                       👣
                     </div>
+
                     <div>
                       <div style={{ fontWeight: "700" }}>
                         {item.address || item.region || item.placeName}

@@ -28,7 +28,7 @@ const CATEGORY_DESIGN = {
   Food: {
     textImage: categoryFood,
     footprintImage: footprintPink,
-    background: "#FFD6E2",
+    background: "#FFD0D6",
     dot: "#F15C93",
   },
   Walk: {
@@ -81,34 +81,37 @@ export default function HomeBottomSheet({
     <div
       style={{
         position: "absolute",
-        left: 0,
-        right: 0,
+        left: 14,
+        right: 14,
         bottom: 0,
-        height: isExpanded ? "58vh" : 200,
-        background: isExpanded ? currentDesign.background : "white",
-        borderTopLeftRadius: 32,
-        borderTopRightRadius: 32,
+        height: isExpanded ? "58vh" : 170,
+        background: isExpanded
+          ? `linear-gradient(
+              to top,
+              white 0%,
+              white 18%,
+              ${currentDesign.background} 100%
+            )`
+          : "white",
+        borderTopLeftRadius: 28,
+        borderTopRightRadius: 28,
         boxShadow: "0 -6px 20px rgba(0,0,0,0.12)",
-        padding: isExpanded ? "12px 24px 18px" : "12px 24px 110px",
+        padding: isExpanded ? "12px 28px 110px" : "12px 28px 96px",
         zIndex: 20,
         boxSizing: "border-box",
         transition: "height 0.25s ease, background 0.25s ease",
         overflow: "hidden",
       }}
     >
-      <div
-        onClick={onToggleExpanded}
-        style={{
-          cursor: "pointer",
-        }}
-      >
+      <div onClick={onToggleExpanded} style={{ cursor: "pointer" }}>
         <div
           style={{
-            width: 88,
-            height: 8,
+            width: 70,
+            height: 7,
             borderRadius: 999,
-            background: isExpanded ? "rgba(255,255,255,0.9)" : "#c1c5cb",
-            margin: "0 auto 34px",
+            background: isExpanded ? "rgba(255,255,255,0.9)" : "#d1d5db",
+            margin: "0 auto 22px",
+            transition: "background 0.25s ease",
           }}
         />
 
@@ -117,8 +120,9 @@ export default function HomeBottomSheet({
             style={{
               margin: 0,
               textAlign: "center",
-              fontSize: 24,
+              fontSize: 30,
               fontWeight: 900,
+              color: "#000",
             }}
           >
             Categories
@@ -132,14 +136,14 @@ export default function HomeBottomSheet({
             style={{
               height: 1,
               background: "rgba(0,0,0,0.08)",
-              marginBottom: 26,
+              marginBottom: 18,
             }}
           />
 
           <h2
             style={{
-              margin: "0 0 16px",
-              fontSize: 26,
+              margin: "0 0 18px",
+              fontSize: 32,
               fontWeight: 900,
               textAlign: "center",
               color: "#000",
@@ -153,17 +157,17 @@ export default function HomeBottomSheet({
             style={{
               height: 1,
               background: "rgba(0,0,0,0.08)",
-              marginBottom: 24,
+              marginBottom: 18,
             }}
           />
 
           <div
             style={{
               textAlign: "center",
-              fontSize: 15,
+              fontSize: 16,
               fontWeight: 700,
-              color: "rgba(0,0,0,0.22)",
-              marginBottom: 10,
+              color: "rgba(0,0,0,0.24)",
+              marginBottom: 8,
             }}
           >
             What’s on your feet today?
@@ -172,7 +176,7 @@ export default function HomeBottomSheet({
           <div
             style={{
               position: "relative",
-              height: 220,
+              height: 210,
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
@@ -188,9 +192,9 @@ export default function HomeBottomSheet({
                 transform: "translateY(-50%)",
                 border: "none",
                 background: "transparent",
-                fontSize: 48,
+                fontSize: 54,
                 fontWeight: 800,
-                color: "rgba(0,0,0,0.18)",
+                color: "rgba(0,0,0,0.2)",
                 cursor: "pointer",
                 zIndex: 5,
                 lineHeight: 1,
@@ -204,14 +208,12 @@ export default function HomeBottomSheet({
               onClick={handleCategoryClick}
               style={{
                 position: "relative",
-                width: 210,
-                height: 220,
+                width: 220,
+                height: 210,
                 border: "none",
                 background: "transparent",
                 cursor: "pointer",
                 padding: 0,
-                display: "flex",
-                alignItems: "center",
                 margin: "0 auto",
               }}
             >
@@ -223,8 +225,8 @@ export default function HomeBottomSheet({
                   left: "50%",
                   top: "50%",
                   transform: "translate(-50%, -50%)",
-                  width: 115,
-                  height: 180,
+                  width: 120,
+                  height: 190,
                   objectFit: "contain",
                   opacity: 0.9,
                   zIndex: 1,
@@ -239,8 +241,8 @@ export default function HomeBottomSheet({
                   left: "50%",
                   top: "50%",
                   transform: "translate(-50%, -48%)",
-                  width: 210,
-                  maxWidth: "70%",
+                  width: 150,
+                  maxWidth: "100%",
                   objectFit: "contain",
                   zIndex: 2,
                 }}
@@ -257,7 +259,7 @@ export default function HomeBottomSheet({
                 transform: "translateY(-50%)",
                 border: "none",
                 background: "transparent",
-                fontSize: 48,
+                fontSize: 54,
                 fontWeight: 900,
                 color: "#000",
                 cursor: "pointer",
@@ -273,8 +275,8 @@ export default function HomeBottomSheet({
             style={{
               display: "flex",
               justifyContent: "center",
-              gap: 14,
-              marginTop: 8,
+              gap: 12,
+              marginTop: 6,
             }}
           >
             {categories.map((category, index) => (
@@ -286,8 +288,8 @@ export default function HomeBottomSheet({
                   setCurrentIndex(index);
                 }}
                 style={{
-                  width: 13,
-                  height: 13,
+                  width: 12,
+                  height: 12,
                   borderRadius: "50%",
                   border: "none",
                   background:

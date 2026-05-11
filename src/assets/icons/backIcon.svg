@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="74.667" height="74.667" viewBox="0 0 74.667 74.667">
+  <defs>
+    <filter id="패스_15" x="0" y="0" width="74.667" height="74.667" filterUnits="userSpaceOnUse">
+      <feOffset input="SourceAlpha"/>
+      <feGaussianBlur stdDeviation="5" result="blur"/>
+      <feFlood flood-opacity="0.161"/>
+      <feComposite operator="in" in2="blur"/>
+      <feComposite in="SourceGraphic"/>
+    </filter>
+  </defs>
+  <g id="그룹_55" data-name="그룹 55" transform="translate(-6 -29)">
+    <g id="발자국_추가하기_" data-name="발자국 추가하기 " transform="translate(21 44)">
+      <g transform="matrix(1, 0, 0, 1, -15, -15)" filter="url(#패스_15)">
+        <path id="패스_15-2" data-name="패스 15" d="M22.333,0A22.333,22.333,0,1,1,8.659,39.985a22.559,22.559,0,0,1-3.236-3.063A22.334,22.334,0,0,1,22.333,0Z" transform="translate(15 15)" fill="#fff"/>
+      </g>
+    </g>
+    <path id="Back" d="M2702.438,1273l-8.438,8.75,8.438,8.75" transform="translate(-2655.5 -1215.5)" fill="none" stroke="#1a1a1a" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+  </g>
+</svg>

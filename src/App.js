@@ -10,7 +10,7 @@ import MyCategoryPage from "./pages/MyCategoryPage.js";
 import CommunityPage from "./pages/CommunityPage.js";
 import CommunityUpload from "./pages/CommunityUpload.js";
 import CommunityDetailPage from "./pages/CommunityDetailPage.js";
-
+import FollowingUserCategoryPage from "./pages/FollowingUserCategoryPage.js";
 
 
 import {AuthProvider} from "./AuthContext";
@@ -35,6 +35,7 @@ function App(){
           >
               <Route path="/home" element={<Home />} />
               <Route path="/followers" element={<FollowingPageScreen />} />
+              <Route path="/followers/:userId/category/:categoryName" element={<FollowingUserCategoryPage />} />
               <Route path="/mypage" element={<MyPageScreen />} />
               <Route path="/upload" element={<Upload />} />
               <Route path="/category/:categoryName" element={<CategoryPage />} />
