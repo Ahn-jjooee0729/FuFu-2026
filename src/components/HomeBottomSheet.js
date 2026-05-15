@@ -29,7 +29,7 @@ const CATEGORY_DESIGN = {
     textImage: categoryFood,
     footprintImage: footprintPink,
     background: "#FFD0D6",
-    dot: "#F15C93",
+    dot: "#E58A91",
   },
   Walk: {
     textImage: categoryWalk,
@@ -56,6 +56,12 @@ export default function HomeBottomSheet({
   const currentCategory = categories[currentIndex];
   const currentDesign =
     CATEGORY_DESIGN[currentCategory?.name] || CATEGORY_DESIGN.Read;
+
+  const isFirstCategory = currentIndex === 0;
+  const isLastCategory = currentIndex === categories.length - 1;
+
+  const leftArrowColor = isFirstCategory ? "rgba(0,0,0,0.2)" : "#000";
+  const rightArrowColor = isLastCategory ? "rgba(0,0,0,0.2)" : "#000";
 
   const handlePrev = (e) => {
     e.stopPropagation();
@@ -92,7 +98,7 @@ export default function HomeBottomSheet({
               white 18%,
               ${currentDesign.background} 100%
             )`
-          : "white",
+          : currentDesign.background,
         borderTopLeftRadius: 28,
         borderTopRightRadius: 28,
         boxShadow: "0 -6px 20px rgba(0,0,0,0.12)",
@@ -109,7 +115,7 @@ export default function HomeBottomSheet({
             width: 70,
             height: 7,
             borderRadius: 999,
-            background: isExpanded ? "rgba(255,255,255,0.9)" : "#d1d5db",
+            background: "rgba(255,255,255,0.9)",
             margin: "0 auto 22px",
             transition: "background 0.25s ease",
           }}
@@ -194,7 +200,7 @@ export default function HomeBottomSheet({
                 background: "transparent",
                 fontSize: 54,
                 fontWeight: 800,
-                color: "rgba(0,0,0,0.2)",
+                color: leftArrowColor,
                 cursor: "pointer",
                 zIndex: 5,
                 lineHeight: 1,
@@ -261,7 +267,7 @@ export default function HomeBottomSheet({
                 background: "transparent",
                 fontSize: 54,
                 fontWeight: 900,
-                color: "#000",
+                color: rightArrowColor,
                 cursor: "pointer",
                 zIndex: 5,
                 lineHeight: 1,

@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import GoogleMapComponent from "../components/GoogleMap";
@@ -16,11 +16,33 @@ export default function Home() {
 
   const [inputValue, setInputValue] = useState("");
   const [searchedCenter, setSearchedCenter] = useState(null);
+  const [currentLocationCenter, setCurrentLocationCenter] = useState(null);
   const [isSheetExpanded, setIsSheetExpanded] = useState(false);
 
   const { footprints } = useFootprints();
 
-  const defaultCenter = useMemo(() => {
+  useEffect(() => {
+    if (!navigator.geolocation) return;
+
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        setCurrentLocationCenter({
+          lat: position.coords.latitude,
+          lng: position.coords.longitude,
+        });
+      },
+      (error) => {
+        console.warn("initial current location error:", error);
+      },
+      {
+        enableHighAccuracy: true,
+        timeout: 10000,
+        maximumAge: 30000,
+      }
+    );
+  }, []);
+
+  const fallbackCenter = useMemo(() => {
     if (footprints.length > 0) {
       const latestFootprint = footprints[0];
 
@@ -33,7 +55,7 @@ export default function Home() {
     return AJOU_CENTER;
   }, [footprints]);
 
-  const mapCenter = searchedCenter ?? defaultCenter;
+  const mapCenter = searchedCenter ?? currentLocationCenter ?? fallbackCenter;
 
   const handleSearch = () => {
     const keyword = inputValue.trim();
@@ -90,10 +112,22 @@ export default function Home() {
     navigate(`/category/${encodeURIComponent(categoryName)}`);
   };
 
+  const handleSelectFootprint = (footprint) => {
+    if (!footprint?.category || !footprint?.id) return;
+
+    navigate(`/category/${encodeURIComponent(footprint.category)}`, {
+      state: { selectedPostId: footprint.id },
+    });
+  };
+
   return (
     <div style={pageStyle}>
       <div style={mapLayerStyle}>
-        <GoogleMapComponent footprints={footprints} center={mapCenter} />
+        <GoogleMapComponent
+          footprints={footprints}
+          center={mapCenter}
+          onSelectFootprint={handleSelectFootprint}
+        />
       </div>
 
       <div style={topBarStyle}>

@@ -136,6 +136,8 @@ export default function FollowingPageScreen() {
     }, {});
   }, [selectedUserFootprints]);
 
+  const selectedUserFollowersCount = selectedUser?.followers?.length || 0;
+
   const getUserFootprintCount = (userId) => {
     return followingFootprints.filter((item) => item.userId === userId).length;
   };
@@ -170,6 +172,14 @@ export default function FollowingPageScreen() {
   };
 
   const handleSelectPost = (post) => {
+    if (post?.userId && !selectedUserId) {
+      setSelectedUserId(post.userId);
+    }
+
+    if (post?.category && !selectedCategoryName) {
+      setSelectedCategoryName(post.category);
+    }
+
     setSelectedPost(post);
   };
 
@@ -202,7 +212,11 @@ export default function FollowingPageScreen() {
   return (
     <div style={pageStyle}>
       <div style={mapWrapperStyle}>
-        <GoogleMapComponent footprints={visibleFootprints} center={mapCenter} />
+        <GoogleMapComponent
+          footprints={visibleFootprints}
+          center={mapCenter}
+          onSelectFootprint={handleSelectPost}
+        />
       </div>
 
       {!selectedUserId && (
@@ -339,9 +353,7 @@ export default function FollowingPageScreen() {
 
             <div style={postListStyle}>
               {selectedCategoryPosts.length === 0 ? (
-                <div style={emptyTextStyle}>
-                  No posts in this category.
-                </div>
+                <div style={emptyTextStyle}>No posts in this category.</div>
               ) : (
                 selectedCategoryPosts.map((post) => (
                   <button
@@ -383,8 +395,8 @@ export default function FollowingPageScreen() {
                 ‹
               </button>
 
-              <div style={detailProfileAreaStyle}>
-                <div style={detailProfileImageStyle}>
+              <div style={instagramProfileRowStyle}>
+                <div style={instagramProfileImageStyle}>
                   <img
                     src={getProfileImageUrl(selectedUser)}
                     alt={getDisplayName(selectedUser)}
@@ -392,15 +404,16 @@ export default function FollowingPageScreen() {
                   />
                 </div>
 
-                <div style={detailNicknameStyle}>
-                  {getDisplayName(selectedUser)}
-                </div>
+                <div style={instagramProfileInfoStyle}>
+                  <div style={instagramNicknameStyle}>
+                    {getDisplayName(selectedUser)}
+                  </div>
 
-                <div style={detailStatsStyle}>
-                  <span style={detailStatsLabelStyle}>| Footprints</span>
-                  <span style={detailStatsNumberStyle}>
-                    {selectedUserFootprints.length}
-                  </span>
+                  <div style={instagramStatsTextStyle}>
+                    <span>Footprints {selectedUserFootprints.length}</span>
+                    <span style={instagramStatsDividerStyle}>|</span>
+                    <span>Followers {selectedUserFollowersCount}</span>
+                  </div>
                 </div>
               </div>
 
@@ -490,7 +503,7 @@ const searchInputStyle = {
   outline: "none",
   fontSize: 17,
   fontFamily: "Pacaembu, sans-serif",
-  fontWeight: 700,
+  fontWeight: 500,
   background: "transparent",
   color: "#111",
 };
@@ -660,67 +673,75 @@ const backButtonStyle = {
   background: "#f3f4f6",
   color: "#111",
   fontSize: 30,
-  lineHeight: 1,
+  lineHeight: 0,
   cursor: "pointer",
   zIndex: 5,
 };
 
-const detailProfileAreaStyle = {
+const instagramProfileRowStyle = {
   display: "flex",
-  flexDirection: "column",
   alignItems: "center",
-  marginBottom: 18,
+  gap: 18,
+  padding: "8px 8px 14px 46px",
+  boxSizing: "border-box",
 };
 
-const detailProfileImageStyle = {
-  width: 92,
-  height: 92,
+const instagramProfileImageStyle = {
+  width: 80,
+  height: 80,
   borderRadius: "50%",
   overflow: "hidden",
   background: "#F2F2F2",
   boxShadow: "0 6px 16px rgba(0,0,0,0.14)",
-  marginBottom: 12,
+  flexShrink: 0,
 };
 
-const detailNicknameStyle = {
+const instagramProfileInfoStyle = {
+  flex: 1,
+  minWidth: 0,
+  display: "flex",
+  flexDirection: "column",
+  justifyContent: "center",
+};
+
+const instagramNicknameStyle = {
   fontFamily: "AppleSDGothicNeoEB00, sans-serif",
-  fontSize: 26,
+  fontSize: 28,
   fontWeight: 800,
   color: "#111",
-  lineHeight: 1.1,
-  marginBottom: 8,
+  lineHeight: 1.15,
+  marginBottom: 6,
+  whiteSpace: "nowrap",
+  overflow: "hidden",
+  textOverflow: "ellipsis",
 };
 
-const detailStatsStyle = {
+const instagramStatsTextStyle = {
   display: "flex",
   alignItems: "center",
-  justifyContent: "center",
   gap: 8,
-};
-
-const detailStatsLabelStyle = {
+  flexWrap: "wrap",
   fontFamily: "AppleSDGothicNeoR00, sans-serif",
-  fontSize: 15,
+  fontSize: 14,
   color: "#9B9B9B",
+  lineHeight: 1.4,
 };
 
-const detailStatsNumberStyle = {
-  fontFamily: "AppleSDGothicNeoR00, sans-serif",
-  fontSize: 16,
-  color: "#111",
+const instagramStatsDividerStyle = {
+  color: "#C4C4C4",
 };
 
 const detailDividerStyle = {
   height: 1,
   background: "rgba(0,0,0,0.08)",
-  marginBottom: 16,
+  marginBottom: 10,
 };
 
 const folderHeaderRowStyle = {
   display: "flex",
   justifyContent: "space-between",
   alignItems: "center",
-  marginBottom: 12,
+  marginBottom: 4,
 };
 
 const folderTitleStyle = {

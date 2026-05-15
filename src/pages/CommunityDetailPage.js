@@ -1,318 +1,384 @@
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import {
-    addDoc,
-    collection,
-    doc,
-    onSnapshot,
-    orderBy,
-    query,
-    serverTimestamp,
+  addDoc,
+  collection,
+  doc,
+  onSnapshot,
+  orderBy,
+  query,
+  serverTimestamp,
 } from "firebase/firestore";
 import { auth, db } from "../firebase";
 
-export default function CommunityDetailPage(){
-    const navigate = useNavigate();
-    const { postId } = useParams();
+const CATEGORY_COLOR = {
+  Read: "#F8DDEC",
+  Stay: "#DCEFFF",
+  Food: "#FFD0D6",
+  Walk: "#DDF4E6",
+  Sport: "#EDFF75",
+};
 
-    const [post, setPost] = useState(null);
-    const [comments, setComments] = useState([]);
-    const [commentText, setCommentText] = useState("");
+export default function CommunityDetailPage() {
+  const navigate = useNavigate();
+  const { categoryName, postId } = useParams();
 
-    useEffect(() => {
-        if (!postId) return;
+  const decodedCategoryName = decodeURIComponent(categoryName || "");
+  const categoryColor = CATEGORY_COLOR[decodedCategoryName] || "#EDFF75";
 
-        const postRef = doc(db, "communityPosts", postId);
+  const [post, setPost] = useState(null);
+  const [comments, setComments] = useState([]);
+  const [commentText, setCommentText] = useState("");
 
-        const unsubscribe = onSnapshot(postRef, (snapshot) => {
-            if (snapshot.exists()){
-                setPost({ id: snapshot.id, ...snapshot.data() });
-            }
-        });
+  useEffect(() => {
+    if (!postId) return;
 
-        return () => unsubscribe();
-    }, [postId]);
+    const postRef = doc(db, "communityPosts", postId);
 
-    useEffect(() => {
-        if (!postId) return;
+    const unsubscribe = onSnapshot(postRef, (snapshot) => {
+      if (snapshot.exists()) {
+        setPost({ id: snapshot.id, ...snapshot.data() });
+      }
+    });
 
-        const commentsRef = collection(db, "communityPosts", postId, "comments");
-        const q = query(commentsRef, orderBy("createdAt", "asc"));
+    return () => unsubscribe();
+  }, [postId]);
 
-        const unsubscribe = onSnapshot(q, (snapshot) => {
-            const data = snapshot.docs.map((doc) => ({
-                id: doc.id,
-                ...doc.data(),
-            }));
+  useEffect(() => {
+    if (!postId) return;
 
-            setComments(data);
-        });
-        return () => unsubscribe();
-    }, [postId]);
+    const commentsRef = collection(db, "communityPosts", postId, "comments");
+    const q = query(commentsRef, orderBy("createdAt", "asc"));
 
-    const formatData = (createdAt) => {
-        if (!createdAt?.toDate) return "";
-        const date = createdAt.toDate();
+    const unsubscribe = onSnapshot(q, (snapshot) => {
+      const data = snapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
 
-        const year = date.getFullYear();
-        const month = `${date.getMonth() + 1}`.padStart(2, "0");
-        const day = `${date.getDate()}`.padStart(2, "0");
+      setComments(data);
+    });
 
-        return `${year}.${month}.${day}`;
+    return () => unsubscribe();
+  }, [postId]);
 
-    };
+  const formatDate = (createdAt) => {
+    if (!createdAt?.toDate) return "";
+    const date = createdAt.toDate();
 
-    const userName = useMemo(() => {
-        const user = auth.currentUser;
-        return user?.displayName || user?.email?.split("@")[0] || "익명 사용자";
-    }, []);
+    const year = date.getFullYear();
+    const month = `${date.getMonth() + 1}`.padStart(2, "0");
+    const day = `${date.getDate()}`.padStart(2, "0");
 
-    const handleSubmitComment = async () => {
-        if(!commentText.trim()) {
-            alert("댓글을 입력해주세요.");
-            return;
-        }
+    return `${year}.${month}.${day}`;
+  };
 
-        const user = auth.currentUser;
+  const formatTime = (createdAt) => {
+    if (!createdAt?.toDate) return "";
+    const date = createdAt.toDate();
 
-        if(!user){
-            alert("로그인이 필요합니다.");
-            return;
-        }
+    const hour = `${date.getHours()}`.padStart(2, "0");
+    const minute = `${date.getMinutes()}`.padStart(2, "0");
 
-        try{
-            await addDoc(collection(db, "communityPosts", postId, "comments"), {
-            content: commentText.trim(),
-            userId: user.uid,
-            userName,
-            createdAt: serverTimestamp(),
-            });
+    return `${hour}:${minute}`;
+  };
 
-            setCommentText("");
-        } catch (error){
-            console.error("댓글 업로드 오류: ", error);
-            alert(error.message);
-        }
-        
-    };
+  const userName = useMemo(() => {
+    const user = auth.currentUser;
+    return user?.displayName || user?.email?.split("@")[0] || "익명 사용자";
+  }, []);
 
-    if(!post){
-        return (
-            <div style={{ padding: 20 }}>
-                Loading...
-            </div>
-        );
+  const handleSubmitComment = async () => {
+    if (!commentText.trim()) {
+      alert("댓글을 입력해주세요.");
+      return;
     }
 
+    const user = auth.currentUser;
+
+    if (!user) {
+      alert("로그인이 필요합니다.");
+      return;
+    }
+
+    try {
+      await addDoc(collection(db, "communityPosts", postId, "comments"), {
+        content: commentText.trim(),
+        userId: user.uid,
+        userName,
+        createdAt: serverTimestamp(),
+      });
+
+      setCommentText("");
+    } catch (error) {
+      console.error("댓글 업로드 오류: ", error);
+      alert(error.message);
+    }
+  };
+
+  if (!post) {
     return (
-        <div
-            style={{
-                height: "100%",
-                overflowY: "auto",
-                background: "#f8f8f8",
-                padding: "16px 16px 120px",
-                boxSizing: "border-box",
-            }}
-        >
-            <div
-                style={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: 10,
-                    marginBottom: 16,
-                }}
-            >
-                <button
-                    type="button"
-                    onClick={() => navigate(-1)}
-                    style={{
-                        width: 42,
-                        height: 42,
-                        borderRadius: "50%",
-                        border: "none",
-                        background: "white",
-                        boxShadow: "0 2px 10px rgba(0,0,0,0.08)",
-                        cursor: "pointer",
-                        fontSize: 18,
-                    }}
-                >
-                    ←
-                </button>
-
-                <div
-                    style={{
-                        flex: 1,
-                        height: 42,
-                        background: "white",
-                        borderRadius: 999,
-                        display: "flex",
-                        alignItems: "center",
-                        padding: "0 14px",
-                        boxShadow: "0 2px 10px rgba(0,0,0,0.08)",
-                        fontSize: 15,
-                        fontWeight: 600,
-                    }}
-                >
-                    Community Post
-                </div>
-            </div>
-
-            <div
-                style={{
-                    background: "white",
-                    borderRadius: 18,
-                    padding: 18,
-                    border: "1px solid #ececec",
-                    marginBottom: 16,
-                }}
-            >
-                <div
-                    style={{
-                        display: "flex",
-                        justifyContent: "space-between",
-                        marginBottom: 12,
-                        color: "#6b7280",
-                        fontSize: 13,
-                    }}
-                >
-                    <span>{post.userName || "익명 사용자"}</span>
-                    <span>{formatData(post.createdAt)}</span>
-                </div>
-
-                <h2
-                    style={{
-                        margin: "0 0 14px",
-                        fontSize: 22,
-                        fontWeight: 800,
-                        color: "#111827",
-                    }}
-                >
-                    {post.title}
-                </h2>
-
-                <p
-                    style={{
-                        margin: 0,
-                        fontSize: 15,
-                        lineHeight: 1.7,
-                        color: "#374151",
-                        whiteSpace: "pre-wrap",
-                    }}
-                >
-                    {post.content}
-                </p>
-            </div>
-
-            <div
-                style={{
-                    fontSize: 18,
-                    fontWeight: 800,
-                    marginBottom: 12,
-                }}
-            >
-                Comments
-            </div>
-
-            <div
-                style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    gap: 10,
-                    marginBottom: 16,
-                }}
-            >
-                {comments.length === 0 ? (
-                    <div
-                        style={{
-                            background: "white",
-                            borderRadius: 14,
-                            padding: 16,
-                            color: "#6b7280",
-                            fontSize: 14,
-                            border: "1px solid #ececec",
-                        }}
-                    >
-                        아직 댓글이 없습니다.
-                    </div>
-                ) : (
-                    comments.map((comment) => (
-                        <div
-                            key={comment.id}
-                            style={{
-                                background: "white",
-                                borderRadius: 14,
-                                padding: 14,
-                                border: "1px solid #ececec",
-                            }}
-                        >
-                            <div
-                                style={{
-                                    display: "flex",
-                                    justifyContent: "space-between",
-                                    marginBottom: 8,
-                                    fontSize: 12,
-                                    color: "#6b7280",
-                                }}
-                            >
-                                <span>{comment.userName || "익명 사용자"}</span>
-                                <span>{formatData(comment.createdAt)}</span>
-                            </div>
-
-                            <div
-                                style={{
-                                    fontSize: 14,
-                                    color: "#374151",
-                                    lineHeight: 1.5,
-                                    whiteSpace: "pre-wrap",
-                                }}
-                            >
-                                {comment.content}
-                            </div>
-                        </div>
-                    ))
-                )}
-            </div>
-
-            <div
-                style={{
-                    background: "white",
-                    borderRadius: 18,
-                    padding: 14,
-                    border: "1px solid #ececec",
-                }}
-            >
-                <textarea
-                    placeholder="Write a comment"
-                    value={commentText}
-                    onChange={(e) => setCommentText(e.target.value)}
-                    style={{
-                        width: "100%",
-                        minHeight: 90,
-                        borderRadius: 12,
-                        border: "1px solid #d1d5db",
-                        padding: 12,
-                        boxSizing: "border-box",
-                        resize: "vertical",
-                        marginBottom: 10,
-                    }}
-                />
-                <button
-                    type="button"
-                    onClick={handleSubmitComment}
-                    style={{
-                        width: "100%",
-                        height: 46,
-                        borderRadius: 14,
-                        border: "none",
-                        background: "black",
-                        color: "white",
-                        fontWeight: 600,
-                        cursor: "pointer",
-                    }}
-                >
-                    Upload Comment
-                </button>
-            </div>
-        </div>
+      <div
+        style={{
+          height: "100%",
+          background: categoryColor,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          fontFamily: "AppleSDGothicNeoM00, sans-serif",
+        }}
+      >
+        Loading...
+      </div>
     );
+  }
+
+  return (
+    <div
+      style={{
+        height: "100%",
+        position: "relative",
+        overflow: "hidden",
+        background: `linear-gradient(
+          to bottom,
+          ${categoryColor} 0%,
+          ${categoryColor} 150px,
+          #ffffff 360px,
+          #ffffff calc(100% - 150px),
+          ${categoryColor} 100%
+        )`,
+      }}
+    >
+      <div style={scrollAreaStyle}>
+        <div style={headerStyle}>
+          <button type="button" onClick={() => navigate(-1)} style={backButtonStyle}>
+            ‹
+          </button>
+
+          <div style={{ textAlign: "center" }}>
+            <h1 style={categoryTitleStyle}>{decodedCategoryName}</h1>
+            <div style={subtitleStyle}>Community</div>
+          </div>
+
+          <div />
+        </div>
+
+        <div style={postCardStyle}>
+          <div style={postMetaRowStyle}>
+            <span>{post.userName || "익명 사용자"}</span>
+            <span>{formatDate(post.createdAt)}</span>
+          </div>
+
+          <h2 style={postTitleStyle}>{post.title}</h2>
+
+          <p style={postContentStyle}>{post.content}</p>
+        </div>
+
+        <div style={commentCardStyle}>
+          {comments.length === 0 ? (
+            <div style={emptyCommentStyle}>아직 댓글이 없습니다.</div>
+          ) : (
+            comments.map((comment, index) => (
+              <div
+                key={comment.id}
+                style={{
+                  ...commentItemStyle,
+                  borderBottom:
+                    index === comments.length - 1
+                      ? "none"
+                      : "1px solid #E5E5E5",
+                }}
+              >
+                <div style={commentMetaRowStyle}>
+                  <span>{comment.userName || "익명 사용자"}</span>
+                  <span>{formatTime(comment.createdAt)}</span>
+                </div>
+
+                <div style={commentContentStyle}>{comment.content}</div>
+              </div>
+            ))
+          )}
+        </div>
+      </div>
+
+      <div style={commentInputBarStyle}>
+        <input
+          type="text"
+          placeholder="Write a comment"
+          value={commentText}
+          onChange={(e) => setCommentText(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              handleSubmitComment();
+            }
+          }}
+          style={commentInputStyle}
+        />
+
+        <button type="button" onClick={handleSubmitComment} style={commentButtonStyle}>
+          +
+        </button>
+      </div>
+    </div>
+  );
 }
+
+const scrollAreaStyle = {
+  height: "100%",
+  overflowY: "auto",
+  padding: "34px 14px 140px",
+  boxSizing: "border-box",
+};
+
+const headerStyle = {
+  display: "grid",
+  gridTemplateColumns: "48px 1fr 48px",
+  alignItems: "center",
+  marginBottom: 28,
+};
+
+const backButtonStyle = {
+  border: "none",
+  background: "transparent",
+  fontSize: 40,
+  lineHeight: 1,
+  cursor: "pointer",
+  color: "#111",
+  padding: 0,
+};
+
+const categoryTitleStyle = {
+  margin: 0,
+  fontFamily: "Pacaembu, sans-serif",
+  fontSize: 26,
+  fontWeight: 900,
+  color: "#000",
+  lineHeight: 1,
+};
+
+const subtitleStyle = {
+  marginTop: 4,
+  fontFamily: "AppleSDGothicNeoM00, sans-serif",
+  fontSize: 14,
+  color: "rgba(0,0,0,0.36)",
+};
+
+const postCardStyle = {
+  background: "white",
+  borderRadius: 34,
+  padding: "38px 44px 44px",
+  boxShadow: "0 10px 26px rgba(0,0,0,0.08)",
+  marginBottom: 20,
+  boxSizing: "border-box",
+};
+
+const postMetaRowStyle = {
+  display: "flex",
+  justifyContent: "space-between",
+  alignItems: "center",
+  marginBottom: 32,
+  fontFamily: "AppleSDGothicNeoM00, sans-serif",
+  fontSize: 14,
+  color: "#9B9B9C",
+};
+
+const postTitleStyle = {
+  margin: "0 0 24px",
+  fontFamily: "AppleSDGothicNeoEB00, sans-serif",
+  fontSize: 20,
+  fontWeight: 800,
+  color: "#000",
+  lineHeight: 1,
+};
+
+const postContentStyle = {
+  margin: 0,
+  fontFamily: "AppleSDGothicNeoM00, sans-serif",
+  fontSize: 16,
+  lineHeight: 1.55,
+  color: "#555555",
+  whiteSpace: "pre-wrap",
+};
+
+const commentCardStyle = {
+  background: "white",
+  borderRadius: 30,
+  padding: "28px 34px",
+  boxShadow: "0 10px 26px rgba(0,0,0,0.08)",
+  boxSizing: "border-box",
+  minHeight: 600,
+};
+
+const emptyCommentStyle = {
+  fontFamily: "AppleSDGothicNeoM00, sans-serif",
+  fontSize: 16,
+  color: "#9B9B9C",
+  padding: "20px 0",
+};
+
+const commentItemStyle = {
+  padding: "20px 0 26px",
+};
+
+const commentMetaRowStyle = {
+  display: "flex",
+  justifyContent: "space-between",
+  alignItems: "center",
+  marginBottom: 16,
+  fontFamily: "AppleSDGothicNeoM00, sans-serif",
+  fontSize: 15,
+  color: "#B8B8B8",
+};
+
+const commentContentStyle = {
+  fontFamily: "AppleSDGothicNeoM00, sans-serif",
+  fontSize: 16,
+  lineHeight: 1.5,
+  color: "#555555",
+  whiteSpace: "pre-wrap",
+};
+
+const commentInputBarStyle = {
+  position: "absolute",
+  left: 0,
+  right: 0,
+  bottom: 0,
+  height: 60,
+  background: "inherit",
+  display: "flex",
+  alignItems: "center",
+  gap: 12,
+  padding: "18px 28px",
+  boxSizing: "border-box",
+  zIndex: 20,
+};
+
+const commentInputStyle = {
+  flex: 1,
+  height: 40,
+  borderRadius: 8,
+  border: "none",
+  background: "white",
+  outline: "none",
+  padding: "0 28px",
+  boxSizing: "border-box",
+  fontFamily: "AppleSDGothicNeoM00, sans-serif",
+  fontSize: 16,
+  color: "#111",
+};
+
+const commentButtonStyle = {
+  width: 30,
+  height: 30,
+  borderRadius: "50%",
+  border: "none",
+  background: "#1A1A1A",
+  color: "white",
+  fontSize: 40,
+  lineHeight: 1,
+  cursor: "pointer",
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+  paddingBottom: 1,
+};

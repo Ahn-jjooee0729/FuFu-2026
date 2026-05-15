@@ -163,7 +163,7 @@ const backButtonStyle = {
 
 const titleStyle = {
     margin: 0,
-    fontSize: 28,
+    fontSize: 26,
     fontWeight: 900,
     color: "#000",
     lineHeight: 1,
@@ -171,13 +171,13 @@ const titleStyle = {
 
 const subtitleStyle = {
     marginTop: 4,
-    fontSize: 13,
+    fontSize: 12,
     color: "rgba(0,0,0,0.4)",
 };
 
 const writeButtonStyle = {
-    width: 40,
-    height: 40,
+    width: 34,
+    height: 34,
     borderRadius: "50%",
     border: "none",
     background: "#1A1A1A",
@@ -188,11 +188,11 @@ const writeButtonStyle = {
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
-    paddingBottom: 4,
+    paddingBottom: 1,
 };
 
 const searchBoxStyle = {
-    height: 64,
+    height: 54,
     borderRadius: 24,
     background: "white",
     display: "flex",
@@ -215,7 +215,7 @@ const searchInputStyle = {
     border: "none",
     outline: "none",
     background: "transparent",
-    fontSize: 20,
+    fontSize: 18,
     color: "#111",
 };
 
@@ -235,7 +235,7 @@ const postItemStyle = {
 };
 
 const postTitleStyle = {
-    fontSize: 20,
+    fontSize: 18,
     fontWeight: 800,
     color: "#111",
     marginBottom: 12,

@@ -70,7 +70,11 @@ export default function FollowingUserCategoryPage() {
     return (
         <div style={pageStyle}>
             <div style={mapLayerStyle}>
-                <GoogleMapComponent footprints={filteredFootprints} center={currentCenter} />
+                <GoogleMapComponent
+                    footprints={filteredFootprints}
+                    center={currentCenter}
+                    onSelectFootprint={handleFootprintClick}
+                    />
             </div>
 
             <button type="button" onClick={handleBack} style={backButtonStyle}>

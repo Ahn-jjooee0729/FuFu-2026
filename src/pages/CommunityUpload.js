@@ -71,14 +71,16 @@ export default function CommunityUpload() {
     <div
       style={{
         height: "100%",
-        overflowY: "hidden",
+        overflowY: "auto",
         background: `linear-gradient(
           to bottom,
           ${categoryColor} 0%,
-          rgba(255,255,255,0.96) 22%,
+          ${categoryColor} 150px,
+          #ffffff 360px,
+          #ffffff calc(100% - 260px),
           ${categoryColor} 100%
         )`,
-        padding: "34px 14px 120px",
+        padding: "34px 14px 80px",
         boxSizing: "border-box",
       }}
     >
@@ -125,15 +127,15 @@ export default function CommunityUpload() {
 
 const headerStyle = {
   display: "grid",
-  gridTemplateColumns: "48px 1fr 48px",
+  gridTemplateColumns: "48px 1fr 64px",
   alignItems: "center",
-  marginBottom: 34,
+  marginBottom: 16,
 };
 
 const backButtonStyle = {
   border: "none",
   background: "transparent",
-  fontSize: 42,
+  fontSize: 40,
   lineHeight: 1,
   cursor: "pointer",
   color: "#111",
@@ -142,62 +144,66 @@ const backButtonStyle = {
 
 const titleHeaderStyle = {
   margin: 0,
-  fontSize: 26,
+  fontFamily: "Pacaembu, sans-serif",
+  fontSize: 28,
   fontWeight: 900,
   color: "#000",
   lineHeight: 1,
 };
 
 const subtitleStyle = {
-  marginTop: 4,
-  fontSize: 13,
-  color: "rgba(0,0,0,0.4)",
+  marginTop: 3,
+  fontFamily: "AppleSDGothicNeoM00, sans-serif",
+  fontSize: 14,
+  color: "rgba(0,0,0,0.36)",
 };
 
 const checkButtonStyle = {
-  width: 44,
-  height: 44,
+  width: 40,
+  height: 40,
   borderRadius: "50%",
   border: "none",
   color: "white",
-  fontSize: 42,
+  fontSize: 40,
   lineHeight: 1,
   cursor: "pointer",
   display: "flex",
   alignItems: "center",
   justifyContent: "center",
-  paddingBottom: 4,
-  boxShadow: "0 6px 18px rgba(0,0,0,0.12)",
+  paddingBottom: 0,
+  boxShadow: "0 12px 26px rgba(0,0,0,0.2)",
 };
 
 const titleInputStyle = {
   width: "100%",
-  height: 78,
-  borderRadius: 32,
+  height: 60,
+  borderRadius: 48,
   border: "none",
   background: "white",
-  boxShadow: "0 8px 24px rgba(0,0,0,0.08)",
-  padding: "0 30px",
+  boxShadow: "0 10px 26px rgba(0,0,0,0.12)",
+  padding: "0 40px",
   boxSizing: "border-box",
   outline: "none",
+  fontFamily: "AppleSDGothicNeoEB00, sans-serif",
   fontSize: 20,
-  fontWeight: 700,
+  fontWeight: 800,
   color: "#111",
-  marginBottom: 18,
+  marginBottom: 12,
 };
 
 const contentInputStyle = {
   width: "100%",
-  height: "calc(100vh - 170px)",
+  minHeight: "calc(100vh - 350px)",
   borderRadius: 32,
   border: "none",
   background: "white",
-  boxShadow: "0 8px 24px rgba(0,0,0,0.08)",
-  padding: "44px 30px",
+  boxShadow: "0 10px 26px rgba(0,0,0,0.08)",
+  padding: "48px 44px",
   boxSizing: "border-box",
   outline: "none",
   resize: "none",
-  fontSize: 14,
+  fontFamily: "AppleSDGothicNeoM00, sans-serif",
+  fontSize: 18,
   lineHeight: 1.55,
-  color: "#333",
+  color: "#555",
 };

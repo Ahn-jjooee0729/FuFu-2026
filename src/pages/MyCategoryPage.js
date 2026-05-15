@@ -15,8 +15,11 @@ export default function MyCategoryPage() {
   const [mapCenter, setMapCenter] = useState(null);
   const [isExpanded, setIsExpanded] = useState(false);
 
-  const { user } = useAuth();
-  const { footprints } = useFootprints({ userId: user?.uid });
+  const { user, loading: authLoading } = useAuth();
+  const { footprints } = useFootprints({ 
+    userId: user?.uid,
+    enabled: !authLoading && Boolean(user?.uid)  
+    });
 
   const filteredFootprints = useMemo(() => {
     if (!categoryName) return [];
@@ -127,6 +130,7 @@ export default function MyCategoryPage() {
         <GoogleMapComponent
           footprints={filteredFootprints}
           center={currentCenter}
+          onSelectFootprint={handleFootprintClick}
         />
       </div>
 
