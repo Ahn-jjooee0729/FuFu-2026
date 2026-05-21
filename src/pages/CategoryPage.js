@@ -271,11 +271,11 @@ export default function CategoryPage() {
           ...bottomSheetStyle,
           height: selectedPost
             ? isExpanded
-              ? "82vh"
-              : "58vh"
+              ? "clamp(580px, 82dvh, 760px)"
+              : "clamp(420px, 58dvh, 560px)"
             : isExpanded
-            ? "76vh"
-            : "52vh",
+            ? "clamp(540px, 76dvh, 720px)"
+            : "clamp(380px, 52dvh, 520px)",
           background: selectedPost
             ? `linear-gradient(
                 to bottom,
@@ -407,7 +407,7 @@ export default function CategoryPage() {
                 onClick={handleEnterCommunity}
                 style={communityButtonStyle}
               >
-                <div style={{ fontSize: 24 }}>💬</div>
+                <div style={{ fontSize: "clamp(18px, 5vw, 24px)" }}>💬</div>
                 <div>Community</div>
               </button>
             </div>
@@ -479,7 +479,7 @@ const mapLayerStyle = {
 
 const topHeaderStyle = {
   position: "absolute",
-  top: 16,
+  top: "calc(16px + env(safe-area-inset-top))",
   left: 16,
   right: 16,
   zIndex: 30,
@@ -500,10 +500,12 @@ const topBackButtonStyle = {
   lineHeight: 0.5,
   color: "#111",
   paddingBottom: 4,
+  flexShrink: 0,
 };
 
 const topCategoryBoxStyle = {
   flex: 1,
+  minWidth: 0,
   height: 48,
   background: "white",
   borderRadius: 18,
@@ -515,6 +517,9 @@ const topCategoryBoxStyle = {
   fontWeight: 500,
   fontFamily: "Pacaembu, light",
   color: "#9ca3af",
+  whiteSpace: "nowrap",
+  overflow: "hidden",
+  textOverflow: "ellipsis",
 };
 
 const bottomSheetStyle = {
@@ -525,7 +530,8 @@ const bottomSheetStyle = {
   borderTopLeftRadius: 28,
   borderTopRightRadius: 28,
   boxShadow: "0 -6px 20px rgba(0,0,0,0.12)",
-  padding: "16px 28px 28px",
+  padding:
+    "clamp(10px, 2.4dvh, 16px) clamp(16px, 5vw, 28px) calc(18px + env(safe-area-inset-bottom))",
   zIndex: 20,
   boxSizing: "border-box",
   display: "flex",
@@ -539,24 +545,27 @@ const sheetHandleStyle = {
   height: 7,
   borderRadius: 999,
   background: "rgba(255,255,255,0.9)",
-  margin: "0 auto 16px",
+  margin: "0 auto clamp(10px, 2dvh, 16px)",
   cursor: "pointer",
   flexShrink: 0,
 };
 
 const detailScrollStyle = {
   flex: 1,
+  minHeight: 0,
   overflowY: "auto",
-  padding: "24px 26px 38px",
+  padding:
+    "clamp(16px, 4vw, 24px) clamp(14px, 5vw, 26px) calc(32px + env(safe-area-inset-bottom))",
   boxSizing: "border-box",
+  WebkitOverflowScrolling: "touch",
 };
 
 const detailTitleStyle = {
-  margin: "0 0 20px",
+  margin: "0 0 clamp(14px, 2.8dvh, 20px)",
   fontFamily: "Segoe UI, sans-serif",
-  fontSize: 26,
+  fontSize: "clamp(22px, 6.6vw, 26px)",
   fontWeight: 800,
-  lineHeight: 1,
+  lineHeight: 1.1,
   color: "#1A1A1A",
   textAlign: "center",
 };
@@ -565,7 +574,8 @@ const thinDividerStyle = {
   width: "100%",
   height: 1,
   background: "#70707042",
-  margin: "0 0 18px",
+  margin: "0 0 clamp(14px, 2.4dvh, 18px)",
+  flexShrink: 0,
 };
 
 const imageGridStyle = {
@@ -579,8 +589,8 @@ const imageGridStyle = {
 };
 
 const detailImageStyle = {
-  width: "100%",
-  height: "100%",
+  width: "clamp(220px, 72vw, 320px)",
+  height: "clamp(150px, 24dvh, 230px)",
   objectFit: "cover",
   borderRadius: 8,
   flexShrink: 0,
@@ -597,18 +607,19 @@ const detailCategoryIconStyle = {
   width: 26,
   height: 26,
   objectFit: "contain",
+  flexShrink: 0,
 };
 
 const detailCategoryTextStyle = {
   fontFamily: "AppleSDGothicNeoSB00, sans-serif",
-  fontSize: 18,
+  fontSize: "clamp(15px, 4.6vw, 18px)",
   color: "#9B9B9B",
 };
 
 const detailContentStyle = {
   margin: "0 0 34px",
   fontFamily: "AppleSDGothicNeoSB00, sans-serif",
-  fontSize: 16,
+  fontSize: "clamp(14px, 4vw, 16px)",
   fontWeight: 500,
   lineHeight: 1.65,
   color: "#1A1A1A",
@@ -617,15 +628,15 @@ const detailContentStyle = {
 
 const infoRowStyle = {
   display: "grid",
-  gridTemplateColumns: "110px 1fr",
+  gridTemplateColumns: "minmax(74px, 110px) 1fr",
   alignItems: "start",
   columnGap: 8,
-  padding: "0 0 26px",
+  padding: "0 0 22px",
 };
 
 const infoLabelStyle = {
   fontFamily: "AppleSDGothicNeoSB00, sans-serif",
-  fontSize: 14,
+  fontSize: "clamp(12px, 3.5vw, 14px)",
   color: "#9B9B9B",
   lineHeight: 1,
 };
@@ -634,34 +645,36 @@ const writerRightStyle = {
   display: "flex",
   alignItems: "center",
   justifyContent: "flex-end",
-  gap: 12,
+  gap: 10,
   minWidth: 0,
 };
 
 const writerEmailStyle = {
   fontFamily: "AppleSDGothicNeoSB00, sans-serif",
-  fontSize: 12,
+  fontSize: "clamp(10px, 3.2vw, 12px)",
   color: "#1A1A1A",
   textAlign: "right",
-  //wordBreak: "break-word",
+  overflow: "hidden",
+  textOverflow: "ellipsis",
+  whiteSpace: "nowrap",
 };
 
 const followButtonStyle = {
-  minWidth: 74,
+  minWidth: 68,
   height: 30,
   borderRadius: 999,
   border: "1px solid #E5E5E5",
   boxShadow: "0 2px 8px rgba(0,0,0,0.06)",
   fontFamily: "AppleSDGothicNeoM00, sans-serif",
-  fontSize: 14,
+  fontSize: "clamp(12px, 3.5vw, 14px)",
   cursor: "pointer",
-  padding: "0 14px",
+  padding: "0 12px",
   flexShrink: 0,
 };
 
 const addressTextStyle = {
   fontFamily: "AppleSDGothicNeoSB00, sans-serif",
-  fontSize: 12,
+  fontSize: "clamp(10px, 3.2vw, 12px)",
   lineHeight: 1.45,
   color: "#1A1A1A",
   textAlign: "right",
@@ -670,28 +683,31 @@ const addressTextStyle = {
 };
 
 const sheetTitleStyle = {
-  margin: "0 0 24px",
-  fontSize: 26,
+  margin: "0 0 clamp(12px, 2.4dvh, 24px)",
+  fontSize: "clamp(22px, 6.4vw, 26px)",
   fontWeight: 900,
   textAlign: "center",
   color: "#000",
+  flexShrink: 0,
 };
 
 const searchAndCommunityRowStyle = {
   display: "flex",
   alignItems: "center",
-  gap: 12,
-  marginBottom: 18,
+  gap: "clamp(8px, 3vw, 12px)",
+  marginBottom: "clamp(10px, 2.2dvh, 18px)",
+  flexShrink: 0,
 };
 
 const searchBoxStyle = {
   flex: 1,
-  height: 50,
+  minWidth: 0,
+  height: "clamp(42px, 6.4dvh, 50px)",
   borderRadius: 16,
   background: "white",
   display: "flex",
   alignItems: "center",
-  padding: "0 16px",
+  padding: "0 clamp(10px, 3.6vw, 16px)",
   boxSizing: "border-box",
   boxShadow: "0 4px 12px rgba(0,0,0,0.06)",
 };
@@ -699,50 +715,56 @@ const searchBoxStyle = {
 const searchIconButtonStyle = {
   border: "none",
   background: "transparent",
-  fontSize: 20,
-  marginRight: 10,
+  fontSize: "clamp(16px, 4.8vw, 20px)",
+  marginRight: "clamp(6px, 2.4vw, 10px)",
   lineHeight: 1,
   cursor: "pointer",
   padding: 0,
+  flexShrink: 0,
 };
 
 const searchInputStyle = {
   flex: 1,
+  minWidth: 0,
   border: "none",
   outline: "none",
-  fontSize: 14,
+  fontSize: "clamp(12px, 3.6vw, 14px)",
   background: "transparent",
   color: "#111",
 };
 
 const communityButtonStyle = {
-  width: 78,
-  height: 50,
+  width: "clamp(64px, 18vw, 78px)",
+  height: "clamp(42px, 6.4dvh, 50px)",
   borderRadius: 16,
   border: "none",
   background: "#1A1A1A",
   color: "white",
   cursor: "pointer",
-  fontSize: 10,
+  fontSize: "clamp(8px, 2.8vw, 10px)",
   fontWeight: 600,
   display: "flex",
   flexDirection: "column",
   alignItems: "center",
   justifyContent: "center",
   lineHeight: 1.1,
+  flexShrink: 0,
 };
 
 const postListWrapperStyle = {
   flex: 1,
+  minHeight: 0,
   overflowY: "auto",
   display: "flex",
   flexDirection: "column",
   paddingRight: 2,
+  paddingBottom: "calc(18px + env(safe-area-inset-bottom))",
+  WebkitOverflowScrolling: "touch",
 };
 
 const emptyStyle = {
   color: "#6b7280",
-  fontSize: 14,
+  fontSize: "clamp(13px, 3.8vw, 14px)",
   paddingTop: 12,
 };
 
@@ -752,16 +774,18 @@ const postItemStyle = {
   border: "none",
   borderBottom: "1px solid rgba(0,0,0,0.08)",
   background: "transparent",
-  padding: "16px 0",
+  padding: "clamp(10px, 2.4dvh, 16px) 0",
   cursor: "pointer",
   display: "flex",
   alignItems: "center",
-  gap: 14,
+  gap: "clamp(10px, 3.4vw, 14px)",
+  boxSizing: "border-box",
+  flexShrink: 0,
 };
 
 const postIconCircleStyle = {
-  width: 38,
-  height: 38,
+  width: "clamp(32px, 9vw, 38px)",
+  height: "clamp(32px, 9vw, 38px)",
   borderRadius: "50%",
   display: "flex",
   alignItems: "center",
@@ -772,8 +796,8 @@ const postIconCircleStyle = {
 };
 
 const postIconStyle = {
-  width: 50,
-  height: 50,
+  width: "clamp(40px, 12vw, 50px)",
+  height: "clamp(40px, 12vw, 50px)",
   objectFit: "contain",
 };
 
@@ -783,32 +807,32 @@ const postTextAreaStyle = {
 };
 
 const postTitleStyle = {
-  fontSize: 18,
+  fontSize: "clamp(15px, 4.6vw, 18px)",
   fontWeight: 800,
   color: "#111",
-  marginBottom: 6,
+  marginBottom: "clamp(4px, 1.2dvh, 6px)",
   whiteSpace: "nowrap",
   overflow: "hidden",
   textOverflow: "ellipsis",
 };
 
 const postLocationStyle = {
-  fontSize: 15,
+  fontSize: "clamp(12px, 3.8vw, 15px)",
   color: "#9ca3af",
-  marginBottom: 8,
+  marginBottom: "clamp(4px, 1.2dvh, 8px)",
   whiteSpace: "nowrap",
   overflow: "hidden",
   textOverflow: "ellipsis",
 };
 
 const postCategoryStyle = {
-  fontSize: 14,
+  fontSize: "clamp(11px, 3.4vw, 14px)",
   color: "#b0b0b0",
 };
 
 const postThumbnailStyle = {
-  width: 82,
-  height: 82,
+  width: "clamp(58px, 18vw, 82px)",
+  height: "clamp(58px, 18vw, 82px)",
   borderRadius: 10,
   objectFit: "cover",
   flexShrink: 0,

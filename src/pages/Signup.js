@@ -89,29 +89,28 @@ export default Signup;
 
 const pageStyle = {
     width: "100%",
+    minHeight: "100%",
     height: "100%",
     position: "relative",
     background: "#FFFFFF",
-    overflow: "hidden",
+    overflowY: "auto",
+    WebkitOverflowScrolling: "touch",
     boxSizing: "border-box",
+    padding: "clamp(72px, 16dvh, 150px) clamp(28px, 8vw, 64px) calc(40px + env(safe-area-inset-bottom))",
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
 };
 
 const logoStyle = {
-    position: "absolute",
-    top: 160,
-    left: "50%",
-    transform: "translateX(-50%)",
-    width: 140,
+    width: "clamp(110px, 34vw, 140px)",
     height: "auto",
     objectFit: "contain",
+    marginBottom: "clamp(70px, 14dvh, 130px)",
 };
 
 const formAreaStyle = {
-    position: "absolute",
-    top: 340,
-    left: 0,
-    right: 0,
-    padding: "0 64px",
+    width: "100%",
     boxSizing: "border-box",
 };
 
@@ -157,16 +156,16 @@ const mainButtonStyle = {
 };
 
 const bottomTextStyle = {
-    position: "absolute",
-    left: 0,
-    right: 0,
-    bottom: 56,
+    marginTop: "auto",
+    paddingTop: 32,
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
     gap: 10,
     fontFamily: "AppleSDGothicNeoM00, sans-serif",
-    fontSize: 16,
+    fontSize: "clamp(13px, 3.8vw, 16px)",
+    flexWrap: "wrap",
+    textAlign: "center",
 };
 
 const bottomGrayTextStyle = {

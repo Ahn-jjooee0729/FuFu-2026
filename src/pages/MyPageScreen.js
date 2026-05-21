@@ -145,6 +145,7 @@ export default function MyPageScreen() {
       <div style={topWhiteCurveStyle} />
 
       <div style={grayAreaStyle} />
+
       <div className="card-slider" style={cardSliderStyle}>
         {categories.map((category) => {
           const count = footprintCounts[category.name] ?? 0;
@@ -227,11 +228,12 @@ const pageStyle = {
   position: "relative",
   overflow: "hidden",
   background: "white",
+  boxSizing: "border-box",
 };
 
 const logoutButtonStyle = {
   position: "absolute",
-  top: 28,
+  top: "calc(22px + env(safe-area-inset-top))",
   right: 24,
   width: 58,
   height: 20,
@@ -246,11 +248,11 @@ const logoutButtonStyle = {
 
 const profileButtonStyle = {
   position: "absolute",
-  top: 60,
+  top: "clamp(48px, 8dvh, 60px)",
   left: "50%",
   transform: "translateX(-50%)",
-  width: 80,
-  height: 80,
+  width: "clamp(68px, 11dvh, 80px)",
+  height: "clamp(68px, 11dvh, 80px)",
   borderRadius: "50%",
   border: "none",
   background: "white",
@@ -270,22 +272,14 @@ const profileImageStyle = {
   objectFit: "cover",
 };
 
-const profileLogoStyle = {
-  fontFamily: "Pacaembu, sans-serif",
-  fontSize: 42,
-  fontWeight: 900,
-  color: "#000",
-  letterSpacing: "-5px",
-};
-
 const nicknameStyle = {
   position: "absolute",
-  top: 150,
+  top: "clamp(128px, 20dvh, 150px)",
   left: 0,
   right: 0,
   textAlign: "center",
   fontFamily: "AppleSDGothicNeoEB00, sans-serif",
-  fontSize: 34,
+  fontSize: "clamp(28px, 5.2dvh, 34px)",
   fontWeight: 800,
   color: "#111",
   zIndex: 30,
@@ -293,33 +287,36 @@ const nicknameStyle = {
 
 const statsRowStyle = {
   position: "absolute",
-  top: 190,
+  top: "clamp(166px, 25dvh, 190px)",
   left: 0,
   right: 0,
   display: "flex",
   alignItems: "center",
   justifyContent: "center",
-  gap: 14,
+  gap: "clamp(8px, 3vw, 14px)",
   zIndex: 30,
+  flexWrap: "wrap",
+  padding: "0 16px",
+  boxSizing: "border-box",
 };
 
 const statLabelStyle = {
   fontFamily: "AppleSDGothicNeoR00, sans-serif",
-  fontSize: 16,
+  fontSize: "clamp(13px, 2.4dvh, 16px)",
   color: "#919191",
 };
 
 const statValueStyle = {
-  fontSize: 16,
+  fontSize: "clamp(13px, 2.4dvh, 16px)",
   color: "#111",
 };
 
 const topWhiteCurveStyle = {
   position: "absolute",
-  top: 100,
+  top: "clamp(86px, 15dvh, 100px)",
   left: "-20%",
   width: "140%",
-  height: 170,
+  height: "clamp(140px, 24dvh, 170px)",
   background: "white",
   borderBottomLeftRadius: "50% 30%",
   borderBottomRightRadius: "50% 30%",
@@ -328,10 +325,10 @@ const topWhiteCurveStyle = {
 
 const grayAreaStyle = {
   position: "absolute",
-  top: 180,
+  top: "clamp(158px, 26dvh, 180px)",
   left: "-18%",
   width: "136%",
-  height: 500,
+  height: "clamp(390px, 58dvh, 500px)",
   background: "#00000026",
   borderTopLeftRadius: "50% 20%",
   borderTopRightRadius: "50% 20%",
@@ -342,27 +339,26 @@ const grayAreaStyle = {
 
 const cardSliderStyle = {
   position: "absolute",
-  top: 240,
+  top: "clamp(214px, 34dvh, 240px)",
   left: 0,
   right: 0,
   display: "flex",
-  gap: 28,
+  gap: "clamp(18px, 6vw, 28px)",
   overflowX: "auto",
-  padding: "0 calc(50% - 118px) 40px",
+  padding: "0 calc(50% - clamp(88px, 28vw, 118px)) 32px",
   boxSizing: "border-box",
   scrollSnapType: "x mandatory",
   WebkitOverflowScrolling: "touch",
   zIndex: 20,
-
   scrollbarWidth: "none",
   msOverflowStyle: "none",
 };
 
 const categoryCardStyle = {
   position: "relative",
-  minWidth: 236,
-  width: 230,
-  height: 360,
+  minWidth: "clamp(150px, 56vw, 236px)",
+  width: "clamp(150px, 56vw, 236px)",
+  aspectRatio: "236 / 360",
   borderRadius: 22,
   border: "none",
   overflow: "hidden",
@@ -380,17 +376,17 @@ const categoryCardImageStyle = {
   inset: 0,
   width: "100%",
   height: "100%",
-  objectFit: "cover",
+  objectFit: "contain",
   zIndex: 1,
 };
 
 const cardNumberStyle = {
   position: "absolute",
-  top: 80,
-  right: 34,
+  top: "clamp(42px, 10dvh, 80px)",
+  right: "clamp(22px, 8vw, 34px)",
   color: "#111",
   fontFamily: "Pacaembu, sans-serif",
-  fontSize: 74,
+  fontSize: "clamp(50px, 12dvh, 74px)",
   fontWeight: 900,
   lineHeight: 1,
   zIndex: 3,
@@ -398,10 +394,10 @@ const cardNumberStyle = {
 
 const archiveAreaStyle = {
   position: "absolute",
-  top: 620,
+  top: "clamp(488px, 76dvh, 620px)",
   left: "-20%",
   width: "140%",
-  height: 360,
+  height: "clamp(280px, 42dvh, 360px)",
   background: "white",
   borderTopLeftRadius: "50% 22%",
   borderTopRightRadius: "50% 22%",
@@ -411,16 +407,16 @@ const archiveAreaStyle = {
 
 const archiveTitleStyle = {
   position: "absolute",
-  top: 60,
+  top: "clamp(28px, 6dvh, 60px)",
   left: "50%",
   transform: "translateX(-50%)",
   fontFamily: "Pacaembu, sans-serif",
-  fontSize: 30,
+  fontSize: "clamp(24px, 5dvh, 30px)",
   fontWeight: 900,
   color: "#000",
   whiteSpace: "nowrap",
   letterSpacing: "0.5px",
-  textShadow:`
+  textShadow: `
   0.6px 0 0 #000,
   -0.6px 0 0 #000,
   0 0.6px 0 #000,
@@ -467,8 +463,8 @@ const modalCloseButtonStyle = {
 };
 
 const modalProfileImageBoxStyle = {
-  width: 220,
-  height: 220,
+  width: "clamp(180px, 56vw, 220px)",
+  height: "clamp(180px, 56vw, 220px)",
   borderRadius: "50%",
   background: "#e5e7eb",
   display: "flex",

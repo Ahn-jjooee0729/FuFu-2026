@@ -310,8 +310,7 @@ const pageStyle = {
   height: "100%",
   overflowY: "auto",
   WebkitOverflowScrolling: "touch",
-  padding: "36px 14px 140px",
-  boxSizing: "border-box",
+  padding: "calc(28px + env(safe-area-inset-top)) 14px calc(120px + env(safe-area-inset-bottom))",    boxSizing: "border-box",
   background: "#D0D0D2",
 };
 

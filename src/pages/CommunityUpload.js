@@ -193,17 +193,17 @@ const titleInputStyle = {
 
 const contentInputStyle = {
   width: "100%",
-  minHeight: "calc(100vh - 350px)",
+  minHeight: "calc(100dvh - 350px)",
   borderRadius: 32,
   border: "none",
   background: "white",
   boxShadow: "0 10px 26px rgba(0,0,0,0.08)",
-  padding: "48px 44px",
+  padding: "clamp(28px, 8vw, 48px) clamp(24px, 8vw, 44px)",
   boxSizing: "border-box",
   outline: "none",
   resize: "none",
   fontFamily: "AppleSDGothicNeoM00, sans-serif",
-  fontSize: 18,
+  fontSize: "clamp(16px, 4.4vw, 18px)",
   lineHeight: 1.55,
   color: "#555",
 };

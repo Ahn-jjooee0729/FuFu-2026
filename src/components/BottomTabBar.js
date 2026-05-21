@@ -7,9 +7,9 @@ import followingPageIcon from "../assets/icons/followingpage.svg";
 const baseStyle = {
   position: "absolute",
   left: "50%",
-  bottom: 18,
+  bottom: "calc(14px + env(safe-area-inset-bottom))",
   transform: "translateX(-50%)",
-  width: "82%",
+  width: "calc(100% - 36px)",
   maxWidth: 360,
   height: 58,
   display: "flex",

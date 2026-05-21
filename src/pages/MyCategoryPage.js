@@ -102,18 +102,18 @@ export default function MyCategoryPage() {
 
   const sheetHeight = selectedFootprint
     ? isExpanded
-      ? "78vh"
-      : "55vh"
+      ? "clamp(560px, 78dvh, 720px)"
+      : "clamp(390px, 55dvh, 520px)"
     : isSheetOpen
-    ? "55vh"
-    : "230px";
-
+    ? "clamp(390px, 55dvh, 520px)"
+    : "clamp(210px, 30dvh, 250px)";
   return (
     <div
       style={{
         position: "relative",
         width: "100%",
-        minHeight: "100vh",
+        height: "100%",
+        minHeight: "100%",
         overflow: "hidden",
         backgroundColor: "#f8f8f8",
       }}
