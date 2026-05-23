@@ -30,13 +30,13 @@ function Login() {
             return "not registered email address.";
         case "auth/wrong-password":
         case "auth/invalid-credential":
-            return "이메일 또는 비밀번호가 올바르지 않아요.";
+            return "Email or password is incorrect.";
         case "auth/too-many-requests":
-            return "시도가 너무 많아요. 잠시 후 다시 시도해 주세요.";
+            return "Too many attempts. Please try again later.";
         case "auth/network-request-failed":
-            return "네트워크 오류가 발생했어요. 인터넷 연결을 확인해 주세요.";
+            return "A network error occurred. Please check your internet connection.";
         default:
-            return error?.message || "로그인 중 오류가 발생했어요.";
+            return error?.message || "An error occurred while logging in.";
         }
     };
 
